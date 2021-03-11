@@ -2,9 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Link } from "react-router-dom";
+import BadgeAvatar from './BadgeAvatar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,12 +42,8 @@ export default function ButtonAppBar(props) {
         <div className={classes.root}>
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                        <MenuIcon />
-                    </IconButton>
                     <img src={props.logo} alt="Logo" className={classes.title} />
-                    <Button className={classes.login} >Login</Button>
-                    <Button className={classes.signup} >Sign up</Button>
+                    <Link to="/profile"><BadgeAvatar user={props.user} /></Link>
                 </Toolbar>
             </AppBar>
         </div>
