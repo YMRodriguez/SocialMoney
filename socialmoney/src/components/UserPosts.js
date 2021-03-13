@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Post(props) {
+export default function UserPost(props) {
     const classes = useStyles();
 
     return (
@@ -47,9 +47,12 @@ export default function Post(props) {
                         Go to full article
                     </Button>
                 </Link>
-                <Link to="/author">
-                    <UserAvatar user={props.author} id="avatar" />
-                </Link>
+                <Button size="small" color="primary" id="linktoarticle">
+                    Remove
+                </Button>
+                <Button size="small" color="primary" id="linktoarticle">
+                    Edit
+                </Button>
             </CardActions>
         </Card>
     );

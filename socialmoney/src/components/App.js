@@ -2,33 +2,36 @@ import '../App.css';
 import React from "react";
 import "@fontsource/roboto";
 import ButtonAppBar from './ButtonAppBar';
+import TagsTabBar from './TagsTabBar';
 import logo from '../logo.png';
 import user from '../user.png';
-import Post from './Post.js';
+import user2 from '../user2.png';
+import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <ButtonAppBar logo={logo} user={user} />
-      <div id="feedAndLateral">
-        <div className="feed">
-          <Post />
-          <Post />
+      <div className="feedAndLateral">
+        <TagsTabBar id="feed" data={user2} />
+        <div id="lateral">
+          <Link to="/posting">
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              id="buttonPublicar"
+            >
+              Publicar
+            </Button>
+          </Link>
+          <div className="marketdata">
+          </div>
         </div>
-        <div className="lateral">
-          <div id="buttons">
 
-          </div>
-          <div id="filters">
-
-          </div>
-          <div id="marketdata">
-
-          </div>
-        </div>
       </div>
 
-    </div>
+    </div >
   );
 }
 

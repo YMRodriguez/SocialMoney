@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function BadgeAvatars(props) {
+export default function UserAvatar(props) {
     const classes = useStyles();
 
     return (
