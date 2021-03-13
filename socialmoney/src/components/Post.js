@@ -42,7 +42,7 @@ export default function Post(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions id="cardactions">
-                <Link to="/author/postId">
+                <Link to="/postId">
                     <Button size="small" color="primary" id="linktoarticle">
                         Go to full article
                     </Button>

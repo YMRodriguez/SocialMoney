@@ -9,7 +9,7 @@ export default function ButtonAppBar(props) {
         <AppBar position="static" id="appbar">
             <Toolbar id="appbar">
                 <img src={props.logo} alt="Logo" id="appbarlogo" />
-                <Link to="/profile"><UserAvatar user={props.user} id="avatar" /></Link>
+                <Link to="/myprofile"><UserAvatar user={props.user} id="avatar" /></Link>
             </Toolbar>
         </AppBar>
     );

@@ -1,0 +1,1 @@
+// Mostrar contenido de un post entero, no la previsualización que se hace con las tarjetas
