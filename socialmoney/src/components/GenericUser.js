@@ -29,7 +29,7 @@ function GenericUser(props) {
                                 <div>Seguidos<div style={{textAlign:"center"}}>N</div></div>
                             </div>
                         </div>
-                        <div style={{textAlign:"center"}}><h2>Aqui va la descripción de pedro</h2></div>
+                        <div style={{textAlign:"center"}}><h2>Aqui va la descripción</h2></div>
                     </div>
                 </div>
                 <div id="posts">

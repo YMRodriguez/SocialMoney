@@ -54,8 +54,8 @@ export default function TagsTabBar(props) {
 
     return (
         <div className={classes.root} style={{width:"100%"}}>
-            <AppBar position="static" id="apptab">
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+            <AppBar position="static" id="apptab" style={{width:"100%"}}>
+                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" id="tabs">
                     <Tab id="tab" label="Ultimos" />
                     <Tab id="tab" label="Opinion" />
                     <Tab id="tab" label="Analisis" />

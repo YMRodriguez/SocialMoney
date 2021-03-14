@@ -28,7 +28,7 @@ ReactDOM.render(
         <Route path="/signup"><SignUp /></Route>
         <Route path="/postId"><FullPost user={user}/></Route>
         <Route path="/myprofile"><UserProfile user={user} name={"pedro"}  /></Route>
-        <Route path="/author"><GenericUser user2={user2} name={"pedro"} /></Route>
+        <Route path="/author"><GenericUser user2={user2} name={"Luis"} /></Route>
       </BrowserRouter>
     </div>
   </React.StrictMode>,

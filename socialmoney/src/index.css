@@ -96,29 +96,36 @@ h1 {
   align-self: flex-start;
 }
 #tab {
+  display:flex;
   background-color:green;
-  flex-grow: 1;
+  flex:1;
+  border-radius: 50%;
+}
+
+#tabs {
+  width:100%;
+  display:flex;
+  background-color:green;
+  justify-content: space-between;
   border-radius: 50%;
 }
 
 #tagpanel {
+  width:100%;
   display:flex;
-  margin-left: 50px;
+  margin-left: 3%;
   flex-direction: column;
   justify-content: center;
 }
 
 #apptab {
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 3%;
   background-color:green;
-  display: flex;
-  justify-content: center;
   border-radius: 10px;
 }
 
 #buttonPublicar{
-  margin-top: 40px;
   margin-left: 10px;
   max-width: 300px;
   font-size: 30px;
