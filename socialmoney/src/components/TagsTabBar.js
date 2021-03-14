@@ -13,11 +13,14 @@ function TabPanel(props) {
 
     return (
         <div
+            sim
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
+            style={{width:"100%"}}
+            
         >
             {value === index && (
                 <Box p={3}>
@@ -50,7 +53,7 @@ export default function TagsTabBar(props) {
     };
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} style={{width:"100%"}}>
             <AppBar position="static" id="apptab">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab id="tab" label="Ultimos" />
@@ -58,15 +61,16 @@ export default function TagsTabBar(props) {
                     <Tab id="tab" label="Analisis" />
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0} id="tagpanel">
+            <TabPanel value={value} index={0} id="tagpanel" style={{width:"100%"}}>
                 <Post author={props.data} className="post" />
                 <Post author={props.data} className="post" />
             </TabPanel>
-            <TabPanel value={value} index={1} id="tagpanel">
-                Item Two
+            <TabPanel value={value} index={1} id="tagpanel" style={{width:"100%"}}>
+                <Post author={props.data} className="post" />
+                <Post author={props.data} className="post" />
             </TabPanel>
-            <TabPanel value={value} index={2} id="tagpanel">
-                Item Three
+            <TabPanel value={value} index={2} id="tagpanel" style={{width:"100%"}}>
+                <Post author={props.data} className="post" />
             </TabPanel>
         </div>
     );

@@ -19,7 +19,7 @@ export default class ReduxProvider extends React.Component {
         return (
             <Provider store={this.store}>
                 <div style={{ height: '100%' }}>
-                    <App />
+                    <App/>
                 </div>
             </Provider>
         );

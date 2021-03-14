@@ -5,15 +5,16 @@ import "@fontsource/roboto";
 import reportWebVitals from './reportWebVitals';
 import ReduxProvider from "./redux/ReduxProvider";
 import LogIn from "./components/LogIn.js"
+import FullPost from "./components/FullPost.js"
 import SignUp from "./components/SignUp.js"
 import UserProfile from "./components/UserProfile.js"
 import GenericUser from "./components/GenericUser.js"
-import PostForm from "./components/PostForm.js"
 import { BrowserRouter, Route } from "react-router-dom";
 import BackgroundVideo from "./components/BackgroundVideo.js";
 import logo from './logo.png';
 import video from './FallingCoins.mp4';
 import user from './user.png';
+import user2 from './user2.png';
 import ButtonAppBar from './components/ButtonAppBar';
 
 ReactDOM.render(
@@ -25,9 +26,9 @@ ReactDOM.render(
         <Route path="/feed"><ReduxProvider /></Route>
         <Route path="/login"><LogIn /></Route>
         <Route path="/signup"><SignUp /></Route>
-        <Route path="/myprofile"><UserProfile /></Route>
-        <Route path="/posting"><PostForm /></Route>
-        <Route path="/author"><GenericUser /></Route>
+        <Route path="/postId"><FullPost user={user}/></Route>
+        <Route path="/myprofile"><UserProfile user={user} name={"pedro"}  /></Route>
+        <Route path="/author"><GenericUser user2={user2} name={"pedro"} /></Route>
       </BrowserRouter>
     </div>
   </React.StrictMode>,
