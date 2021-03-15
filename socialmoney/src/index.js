@@ -21,14 +21,13 @@ ReactDOM.render(
   <React.StrictMode>
     <div>
       <BrowserRouter>
-        <ButtonAppBar logo={logo} user={user} />
         <Route exact path="/"><BackgroundVideo logo={logo} video={video} /></Route>
-        <Route path="/feed"><ReduxProvider /></Route>
-        <Route path="/login"><LogIn /></Route>
-        <Route path="/signup"><SignUp /></Route>
-        <Route path="/postId"><FullPost user={user}/></Route>
-        <Route path="/myprofile"><UserProfile user={user} name={"pedro"}  /></Route>
-        <Route path="/author"><GenericUser user2={user2} name={"Luis"} /></Route>
+        <Route path="/feed"><ButtonAppBar logo={logo} user={user} /><ReduxProvider /></Route>
+        <Route path="/login"><ButtonAppBar logo={logo} user={user} /><LogIn /></Route>
+        <Route path="/signup"><ButtonAppBar logo={logo} user={user} /><SignUp /></Route>
+        <Route path="/postId"><ButtonAppBar logo={logo} user={user} /><FullPost user={user} /></Route>
+        <Route path="/myprofile"><ButtonAppBar logo={logo} user={user} /><UserProfile user={user} name={"pedro"} /></Route>
+        <Route path="/author"><ButtonAppBar logo={logo} user={user} /><GenericUser user2={user2} name={"Luis"} /></Route>
       </BrowserRouter>
     </div>
   </React.StrictMode>,

@@ -19,8 +19,8 @@ function TabPanel(props) {
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
-            style={{width:"100%"}}
-            
+            style={{ width: "100%" }}
+
         >
             {value === index && (
                 <Box p={3}>
@@ -37,15 +37,7 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 0,
-    },
-}));
-
 export default function TagsTabBar(props) {
-    const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -53,23 +45,24 @@ export default function TagsTabBar(props) {
     };
 
     return (
-        <div className={classes.root} style={{width:"100%"}}>
-            <AppBar position="static" id="apptab" style={{width:"100%"}}>
+        <div style={{ width: "100%" }}>
+            <AppBar position="static" id="apptab" style={{ width: "100%" }}>
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" id="tabs">
-                    <Tab id="tab" label="Ultimos" />
-                    <Tab id="tab" label="Opinion" />
-                    <Tab id="tab" label="Analisis" />
+                    <Tab id="tab" label="Últimos" />
+                    <Tab id="tab" label="Opinión" />
+                    <Tab id="tab" label="Análisis Técnico" />
+                    <Tab id="tab" label="Análisis Fundamental" />
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0} id="tagpanel" style={{width:"100%"}}>
+            <TabPanel value={value} index={0} id="tagpanel" style={{ width: "100%" }}>
                 <Post author={props.data} className="post" />
                 <Post author={props.data} className="post" />
             </TabPanel>
-            <TabPanel value={value} index={1} id="tagpanel" style={{width:"100%"}}>
+            <TabPanel value={value} index={1} id="tagpanel" style={{ width: "100%" }}>
                 <Post author={props.data} className="post" />
                 <Post author={props.data} className="post" />
             </TabPanel>
-            <TabPanel value={value} index={2} id="tagpanel" style={{width:"100%"}}>
+            <TabPanel value={value} index={2} id="tagpanel" style={{ width: "100%" }}>
                 <Post author={props.data} className="post" />
             </TabPanel>
         </div>

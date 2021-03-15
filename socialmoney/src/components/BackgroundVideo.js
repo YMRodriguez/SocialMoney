@@ -9,7 +9,7 @@ function BackgroundVideo(props) {
             <video autoPlay="autoplay" loop="loop" muted id="Video" >
                 <source src={props.video} type="video/mp4" />
             </video>
-            <img src={props.logo} alt="Logo" id='logo' />
+            <img src={props.logo} alt="Logo" id="logo" />
             <InteractiveDescription logo={props.logo} />
             <Link to="/login"><Button id="log">Log in</Button></Link>
             <Link to="/signup"><Button id="signup">Sign up</Button></Link>
