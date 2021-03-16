@@ -87,6 +87,17 @@ export default function SignUp() {
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
+                                type="date"
+                                required
+                                fullWidth
+                                id="birthdate"
+                                label="YYYY-MM-DD"
+                                name="birthDate"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
                                 required
                                 fullWidth
                                 id="email"
