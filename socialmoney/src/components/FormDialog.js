@@ -12,6 +12,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
+import $ from 'jquery'
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -20,11 +21,61 @@ export default function FormDialog() {
     atec: false,
     afun: false,
     comm: false,
+    title: "",
+    content: "",
+    author: "manolo" //cambiar con lo que venga de login....
+
   });
+
+   async function makePostRequest(params){
+
+    var url = "http://localhost:8080/SMON-SERVICE/createPost"
+     $.ajax({
+      url: url,
+      type: 'POST',
+      data: params,
+      async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+      success: function (msg) {
+          if (msg == "OK") {
+          handleClose()
+          alert("¡Publicado con éxito!")
+          console.log('Success')
+          }
+      }
+    }); 
+
+    // ESTO NO LO HE CONSEGUIDO POR AQUI.... asique lo que me mande JS lo cambio en el back
+
+   /*  var response = await fetch(url,{
+      method: 'POST',
+      credentials: "include",
+      body: JSON.stringify(params), // data can be `string` or {object}!
+      headers:{
+          'Content-Type': 'application/json'
+      }
+    })
+    return response */
+  } 
+ 
+
+    const handleSubmit = () =>{
+    setTimeout(() => {
+      makePostRequest(state) //envia la peticion al java, le paso el estado (el contenido del post)
+    }, 100);
+  };
+ 
+
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  const handleChangeText = (event) => {
+    setState({ ...state, [event.target.name]: event.target.value });
+  };
+
+
+
 
   const { opinion, atec, afun, comm } = state;
   const error = [opinion, atec, afun].filter((v) => v).length < 1;
@@ -36,6 +87,7 @@ export default function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
 
   return (
     <div>
@@ -49,6 +101,8 @@ export default function FormDialog() {
             <h2>Título</h2>
           </DialogContentText>
           <TextField
+            onChange={handleChangeText}
+            name="title"
             autoFocus
             margin="dense"
             id="name"
@@ -60,6 +114,8 @@ export default function FormDialog() {
             <h2>Contenido</h2>
           </DialogContentText>
           <TextField
+            onChange={handleChangeText}
+            name="content"
             autoFocus
             margin="dense"
             id="name"
@@ -98,12 +154,16 @@ export default function FormDialog() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Publicar
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+
+
+
 }
+
 
