@@ -10,7 +10,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 
 export default function FormDialog() {
@@ -53,7 +52,7 @@ export default function FormDialog() {
             margin="dense"
             id="name"
             label="Titulo"
-            type="email"
+            type="text"
             fullWidth
           />
           <DialogContentText>
@@ -64,7 +63,7 @@ export default function FormDialog() {
             margin="dense"
             id="name"
             label="Contenido"
-            type="email"
+            type="text"
             fullWidth
           />
         </DialogContent>

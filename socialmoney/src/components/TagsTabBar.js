@@ -20,7 +20,6 @@ function TabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
             style={{ width: "100%" }}
-
         >
             {value === index && (
                 <Box p={3}>
