@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import $ from 'jquery'
 
 function Copyright() {
     return (
@@ -47,12 +49,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LogIn() {
+    const history = useHistory();
     const classes = useStyles();
     
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
-        username: "dfbdf",
-        password: "fdgfddd"
+        username: "",
+        password: ""
     });
 
     const handleSubmit = () =>{
@@ -61,26 +64,25 @@ export default function LogIn() {
         }, 100);
     };
     async function makePostRequest(params){
-        console.log(params)
+
         var url = "http://localhost:8080/SMON-SERVICE/login"
-        var response = await fetch(url,{
-            mode: 'no-cors',
-            method: 'POST',
-            credentials: "include",
-            body: JSON.stringify(params), // data can be `string` or {object}!
-            headers:{
-                'Content-Type': 'application/json'
+        $.ajax({
+        url: url,
+        type: 'POST',
+        data: JSON.stringify(params),
+        async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+        success: function (msg) {
+            if (msg.code == 200){
+                history.push("/feed")
+                console.log(msg.account)
+            }else{
+                alert("Usuario incorrecto")
             }
-        })
-        var buffer = await response.arrayBuffer()
-        var dataView = new DataView(buffer)
-        var decoder = new TextDecoder("ISO-8859-1")
-        response = await JSON.parse(decoder.decode(dataView))
-        return response
+            }
+        }); 
     }
 
-
-    const handleChangeText = (event) => {
+    const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.value });
     };
 
@@ -96,17 +98,20 @@ export default function LogIn() {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
+                        
+                        onChange={handleChange}
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="username"
+                        name="username"
+                        autoComplete="username"
                         autoFocus
                     />
                     <TextField
+                        onChange={handleChange}
                         variant="outlined"
                         margin="normal"
                         required

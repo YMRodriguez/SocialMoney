@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import $ from 'jquery'
 
 function Copyright() {
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+    const history = useHistory();
     const classes = useStyles();
     const [state, setState] = React.useState({
         username: "",
@@ -63,55 +65,26 @@ export default function SignUp() {
     };
 
 
+
     async function makePostRequest(params){
+
         var url = "http://localhost:8080/SMON-SERVICE/signup"
-        var response = await fetch(url,{
-            method: 'POST',
-            credentials: "include",
-            body: JSON.stringify(params), // data can be `string` or {object}!
-            headers:{
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
-                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-                'Content-Type': 'application/json'
+        $.ajax({
+        url: url,
+        type: 'POST',
+        data: JSON.stringify(params),
+        async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+        success: function (msg) {
+            if(msg.code ==200){
+                history.push("/login")
+            }else{
+                alert(msg.mensaje)
             }
-        })
-        response = response.json()
-        return response
+        }
+        }); 
     }
-    // async function makePostRequest(params){
 
-    //     var url = "http://localhost:8080/SMON-SERVICE/signup"
-    //      $.ajax({
-    //       url: url,
-    //       type: 'POST',
-    //       data: params,
-    //       async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
-    //       success: function (msg) {
-    //           if (msg == "OK") {
-    //           alert("¡Publicado con éxito!")
-    //           console.log('Success')
-    //           }
-    //       }
-    //     }); 
-    // }
 
-    // async function makePostRequest(params){
-    //     var url = "http://localhost:8080/SMON-SERVICE/signup"
-    //     var response = await fetch(url,{
-    //         method: 'POST',
-    //         credentials: "include",
-    //         body: JSON.stringify(params), // data can be `string` or {object}!
-    //         headers:{
-    //             'Content-Type': 'application/json'
-    //         }
-    //       })
-    //     var buffer = await response.arrayBuffer()
-    //     var dataView = new DataView(buffer)
-    //     var decoder = new TextDecoder("ISO-8859-1")
-    //     response = await JSON.parse(decoder.decode(dataView))
-    //     return response
-    // }
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.value });
