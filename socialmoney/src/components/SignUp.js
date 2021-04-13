@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
+import $ from 'jquery'
 
 function Copyright() {
     return (
@@ -48,6 +49,73 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
     const classes = useStyles();
+    const [state, setState] = React.useState({
+        username: "",
+        password: "",
+        age: "",
+        name: ""
+    });
+
+    const handleSubmit = () =>{
+        setTimeout(() => {
+        makePostRequest(state) 
+        }, 100);
+    };
+
+
+    async function makePostRequest(params){
+        var url = "http://localhost:8080/SMON-SERVICE/signup"
+        var response = await fetch(url,{
+            method: 'POST',
+            credentials: "include",
+            body: JSON.stringify(params), // data can be `string` or {object}!
+            headers:{
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                'Content-Type': 'application/json'
+            }
+        })
+        response = response.json()
+        return response
+    }
+    // async function makePostRequest(params){
+
+    //     var url = "http://localhost:8080/SMON-SERVICE/signup"
+    //      $.ajax({
+    //       url: url,
+    //       type: 'POST',
+    //       data: params,
+    //       async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+    //       success: function (msg) {
+    //           if (msg == "OK") {
+    //           alert("¡Publicado con éxito!")
+    //           console.log('Success')
+    //           }
+    //       }
+    //     }); 
+    // }
+
+    // async function makePostRequest(params){
+    //     var url = "http://localhost:8080/SMON-SERVICE/signup"
+    //     var response = await fetch(url,{
+    //         method: 'POST',
+    //         credentials: "include",
+    //         body: JSON.stringify(params), // data can be `string` or {object}!
+    //         headers:{
+    //             'Content-Type': 'application/json'
+    //         }
+    //       })
+    //     var buffer = await response.arrayBuffer()
+    //     var dataView = new DataView(buffer)
+    //     var decoder = new TextDecoder("ISO-8859-1")
+    //     response = await JSON.parse(decoder.decode(dataView))
+    //     return response
+    // }
+
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value });
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -63,51 +131,42 @@ export default function SignUp() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="fname"
-                                name="firstName"
+                                onChange={handleChange}
+                                autoComplete="name"
+                                name="name"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                id="name"
+                                label="name"
                                 autoFocus
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
+                                onChange={handleChange}
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                id="agee"
+                                name="age"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                onChange={handleChange}
                                 variant="outlined"
-                                type="date"
                                 required
                                 fullWidth
-                                id="birthdate"
-                                label="YYYY-MM-DD"
-                                name="birthDate"
+                                id="username"
+                                label="username"
+                                name="username"
+                                autoComplete="username"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
+                                onChange={handleChange}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -124,7 +183,7 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={() => console.log("hola")}
+                        onClick={handleSubmit}
                     >
                         Sign Up
                     </Button>

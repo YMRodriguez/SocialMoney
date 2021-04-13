@@ -48,6 +48,41 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LogIn() {
     const classes = useStyles();
+    
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState({
+        username: "dfbdf",
+        password: "fdgfddd"
+    });
+
+    const handleSubmit = () =>{
+        setTimeout(() => {
+        makePostRequest(state) 
+        }, 100);
+    };
+    async function makePostRequest(params){
+        console.log(params)
+        var url = "http://localhost:8080/SMON-SERVICE/login"
+        var response = await fetch(url,{
+            mode: 'no-cors',
+            method: 'POST',
+            credentials: "include",
+            body: JSON.stringify(params), // data can be `string` or {object}!
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        })
+        var buffer = await response.arrayBuffer()
+        var dataView = new DataView(buffer)
+        var decoder = new TextDecoder("ISO-8859-1")
+        response = await JSON.parse(decoder.decode(dataView))
+        return response
+    }
+
+
+    const handleChangeText = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value });
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -82,21 +117,15 @@ export default function LogIn() {
                         id="password"
                         autoComplete="current-password"
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
-                    <Link to='/feed'>
                         <Button
-                            type="submit"
+                            onClick={handleSubmit}
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
                         >
                             Log In
-                    </Button>
-                    </Link>
+                        </Button>
                     <Grid container>
                         <Grid item>
                             <Link to='/signup'>
