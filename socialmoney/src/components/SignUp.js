@@ -87,7 +87,14 @@ export default function SignUp() {
 
 
     const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.value });
+        const esValido = event.target.validity.valid;
+        if(esValido){
+            console.log("valido")
+            setState({ ...state, [event.target.name]: event.target.value });
+        }
+        else{
+            setState({ ...state, [event.target.name]: "" });
+        }
     };
 
     return (
@@ -121,7 +128,8 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="agee"
+                                pattern="[0-9]{0,13}"
+                                id="age"
                                 name="age"
                             />
                         </Grid>
@@ -165,7 +173,7 @@ export default function SignUp() {
                             <Link to='/login'>
                                 <Button href="#" variant="body2">
                                     Already have an account? Sign in
-                            </Button>
+                                </Button>
                             </Link>
                         </Grid>
                     </Grid>
