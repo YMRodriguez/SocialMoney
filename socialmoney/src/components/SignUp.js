@@ -98,7 +98,7 @@ export default function SignUp() {
                 state.length < 5 ? errors[0] = true : errors[0] = false;
                 return errors[0];
             case "age":
-                state < 18 ? errors[1] = true : errors[1] = false;
+                state.length <1 || parseInt(state) < 18 ? errors[1] = true : errors[1] = false;
                 return errors[1];
             // We may want to make this more secure in the future.
             case "username":
@@ -163,7 +163,7 @@ export default function SignUp() {
                                 fullWidth
                                 type="number"
                                 id="age"
-                                name="Age"
+                                name="age"
                                 label="Edad"
                                 helperText="Intruzca su edad, debe ser mayor de 18 años"
                             />
