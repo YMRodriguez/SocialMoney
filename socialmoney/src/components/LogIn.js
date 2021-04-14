@@ -21,6 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
+import { userLogged } from '../redux/actions';
 
 function Copyright() {
     return (
@@ -111,7 +112,7 @@ export default function LogIn() {
             success: function (msg) {
                 if (msg.code == 200) {
                     history.push("/feed")
-                    console.log(msg.account)
+                    props.dispatch(userLogged(msg.account))
                 } else {
                     alert("Usuario incorrecto")
                 }
@@ -197,3 +198,12 @@ export default function LogIn() {
         </Container>
     );
 }
+
+function mapStateToProps(state) {
+    return {
+      ...state
+    };
+  }
+  
+  //export default App;
+  export default connect(mapStateToProps)(LogIn);

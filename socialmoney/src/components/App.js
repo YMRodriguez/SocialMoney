@@ -9,13 +9,16 @@ import nasdaq from '../nasdaq.png';
 import sp500 from '../sp500.png';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
-import FormDialog from "./FormDialog.js"
+import FormDialog from "./FormDialog.js";
+import {connect} from 'react-redux';
+import { PinDropSharp } from '@material-ui/icons';
 
-function App() {
+function App(props) {
   return (
     <div className="App" style={{ display: "flex", flexDirection: "row", width: "100%", height: "100%" }}>
       <div style={{ width: "70%" }}>
-        <TagsTabBar id="feed" data={user2} />
+        <TagsTabBar id="feed" data={user2}
+                              user={props.user} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", width: "30%", marginTop: "1%", height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -23,7 +26,7 @@ function App() {
           <div style={{ width: "60%", textAlign: "center" }}><h2 style={{ marginTop: "30%" }}> @Pedro</h2></div>
         </div>
         <div style={{ marginTop: "10%" }}>
-          <FormDialog variant="contained" textColor="white" color="primary"  >
+          <FormDialog variant="contained" textColor="white" color="primary" user = {props.user} >
             Publicar
             </FormDialog>
         </div>
@@ -42,4 +45,12 @@ function App() {
   );
 }
 
-export default App;
+//export default App;
+function mapStateToProps(state) {
+  return {
+    ...state
+  };
+}
+
+//export default App;
+export default connect(mapStateToProps)(App);
