@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Post from './Post';
 import { Link } from "react-router-dom";
 import ConnectPlatformForm from "./ConnectPlatformForm.js";
+import EditProfileForm from "./EditProfileForm.js";
 
 function UserProfile(props) {
     return (
@@ -20,9 +21,8 @@ function UserProfile(props) {
                     </div>
                     <div id="userHeader">
                         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
-                            <Button color="primary" id="buttonFollow" style={{ color: "white" }}>
-                                Editar
-                            </Button>
+                            <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }}>
+                            </EditProfileForm>
                             <div id="followItem">
                                 <div>Seguidores<div style={{ textAlign: "center" }}>N</div></div>
                             </div>
@@ -54,7 +54,6 @@ function UserProfile(props) {
                 </div>
             </div>
         </div>
-
     )
 }
 

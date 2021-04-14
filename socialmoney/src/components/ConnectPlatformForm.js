@@ -81,7 +81,7 @@ export default function ConnectPlatformForm() {
                 </DialogContent>
                 <FormControl component="fieldset" style={{ marginLeft: "5%", marginTop: "1%" }}>
                     <FormLabel component="legend">Por favor, suba el informe correspondiente a la negociación en la franja de tiempo seleccionada</FormLabel>
-                    <Input type="file" onChange={handleChangePDF} name="file"> Suba aquí su informe</Input>
+                    <Input type="file" defaultValue={"nada seleccionado"} onChange={handleChangePDF} name="file"> Suba aquí su informe</Input>
                 </FormControl>
                 <DialogActions>
                     <Button onClick={handleCloseCancelling} color="primary">
