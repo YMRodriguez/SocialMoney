@@ -38,8 +38,25 @@ export default function ConnectPlatformForm() {
     };
 
     const handleCloseConecting = () => {
-        // TODO, hacer aquí la peticion
-        setOpen(false);
+        if (state.platform === "" || state.timeframe === "" || state.file === "") {
+            alert("Tiene que rellenar todos los campos.")
+        } else {
+            const formData = new FormData();
+            formData.append("pdf", state.file)
+            formData.append("settings",
+                new Blob([JSON.stringify(
+                    { "platform": state.platform, "timeframe": state.timeframe })], { type: 'application/json' }))
+            console.log(formData)
+            var res = async () => await fetch("http://127.0.0.1:5000/checkInteractiveBrokers", {
+                method: "POST",
+                body: formData
+            }).then(r =>
+                console.log(r.json())
+                // Need to send the response to the backend
+            )
+            res()
+            setOpen(false);
+        }
     };
 
     return (
@@ -81,7 +98,7 @@ export default function ConnectPlatformForm() {
                 </DialogContent>
                 <FormControl component="fieldset" style={{ marginLeft: "5%", marginTop: "1%" }}>
                     <FormLabel component="legend">Por favor, suba el informe correspondiente a la negociación en la franja de tiempo seleccionada</FormLabel>
-                    <Input type="file" defaultValue={"nada seleccionado"} onChange={handleChangePDF} name="file"> Suba aquí su informe</Input>
+                    <Input type="file" onChange={handleChangePDF} name="file" placeholder="hola"> Suba aquí su informe</Input>
                 </FormControl>
                 <DialogActions>
                     <Button onClick={handleCloseCancelling} color="primary">
