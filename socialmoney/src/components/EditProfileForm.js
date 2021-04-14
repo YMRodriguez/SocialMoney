@@ -10,14 +10,15 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import $ from 'jquery'
 
 export default function EditProfileForm() {
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
+        username: '',
         picture: '',
         description: '',
         password: '',
@@ -50,7 +51,13 @@ export default function EditProfileForm() {
     };
 
     const handleCloseConecting = () => {
-        // TODO, hacer aquí la peticion
+        if (error) {
+            alert("Tiene que rellenar todos los campos.")
+        } else {
+            setTimeout(() => {
+                makePostRequest(state)
+            }, 100);
+        }
         setOpen(false);
     };
 
@@ -67,6 +74,28 @@ export default function EditProfileForm() {
                 state.length < 8 ? error = true : error = false;
                 return error;
         }
+    }
+
+    async function makePostRequest(params) {
+        var url = "http://localhost:8080/SMON-SERVICE/editprofile"
+        const formData = new FormData();
+        formData.append("picture", state.picture)
+        formData.append("data",
+            new Blob([JSON.stringify(
+                { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username })], { type: 'application/json' }))
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log("Success")
+                } else {
+                    alert("Usuario incorrecto")
+                }
+            }
+        });
     }
 
     return (
