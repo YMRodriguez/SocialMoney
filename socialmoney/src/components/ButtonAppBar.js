@@ -4,6 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade, makeStyles } from '@material-ui/core/styles';
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,24 +52,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar(props) {
     const classes = useStyles();
+    const location = useLocation().pathname;
     return (
-        <AppBar position="static" id="appbar">
-            <Toolbar id="appbar">
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon />
-                    </div>
-                    <InputBase
-                        placeholder="Search…"
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        inputProps={{ 'aria-label': 'search' }}
-                    />
-                </div>
-                <img src={props.logo} alt="Logo" id="appbarlogo" />
-            </Toolbar>
-        </AppBar>
+        <div>
+            { location === "/signup" || location === "/login" ?
+                (<AppBar position="static" id="appbarNoSearch">
+                    <Toolbar id="appbarNoSearch">
+                        <img src={props.logo} alt="Logo" />
+                    </Toolbar>
+                </AppBar>)
+                :
+                (<AppBar position="static" id="appbar">
+                    <Toolbar id="appbar">
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </div>
+                        <img src={props.logo} alt="Logo" id="appbarlogo" />
+                    </Toolbar>
+                </AppBar>)}
+        </div>
+
     );
 }
