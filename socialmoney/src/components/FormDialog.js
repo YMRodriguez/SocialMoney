@@ -28,6 +28,7 @@ export default function FormDialog(props) {
 
   async function makePostRequest(params) {
 
+
     setState({ ...state, author: props.user.username })
     console.log(state.author)
 
@@ -177,4 +178,3 @@ export default function FormDialog(props) {
 
 
 }
-
