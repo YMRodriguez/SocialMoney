@@ -79,12 +79,17 @@ export default function EditProfileForm() {
     async function makePostRequest(params) {
         var url = "http://localhost:8080/SMON-SERVICE/editprofile"
         const formData = new FormData();
-        formData.append("picture", state.picture)
-        formData.append("data",
+        formData.append("picture", params.picture)
+        formData.append("dato",
             new Blob([JSON.stringify(
                 { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username })], { type: 'application/json' }))
-        $.ajax({
+                console.log(formData)
+                $.ajax({
+            processData: false,  // tell jQuery not to process the data
+            contentType: false ,
             url: url,
+            cache: false,
+            enctype:"mutipart/form-data",
             type: 'POST',
             data: formData,
             async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
