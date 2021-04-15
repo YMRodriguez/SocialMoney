@@ -2,6 +2,8 @@ import React from "react";
 import Button from '@material-ui/core/Button';
 import Post from './Post';
 import { Link } from "react-router-dom";
+import ConnectPlatformForm from "./ConnectPlatformForm.js";
+import EditProfileForm from "./EditProfileForm.js";
 import {connect} from 'react-redux';
 import $ from 'jquery';
 
@@ -56,9 +58,8 @@ class UserProfile extends React.Component {
                         </div>
                         <div id="userHeader">
                             <div style={{  display: "flex", flexDirection:"row", justifyContent:"space-around"}} >
-                                <Button color="primary" id="buttonFollow"  style={{color: "white"}}>
-                                    Editar
-                                </Button>
+                                <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }}>
+                                </EditProfileForm>
                                 <div id="followItem">
                                     <div>Seguidores<div style={{textAlign:"center"}}>N</div></div>
                                 </div>
@@ -80,21 +81,20 @@ class UserProfile extends React.Component {
                     </div>
                 </div>
                 <div style={{width: "20%"}}>
-                    <div style={{textAlign:"center", width:"100%", fontSize: "20px",  marginTop: "8%" }}>
-                        <div>Publicaciones<div>N</div></div>
+                    <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                    <div>Publicaciones<div>N</div></div>
+                </div>
+                <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                    <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>
                     </div>
-                    <div style={{textAlign:"center", width:"100%", fontSize: "20px",  marginTop: "8%" }}>
-                        <div>Rentabilidad<div style={{textAlign:"center", width:"100%"}}>N%</div>
-                            <Button color="primary" id="buttonSuperFollow" style={{color: "white"}}>
-                                Conectar rentabilidad
-                            </Button>
-                        </div>
-                    </div>
-                    <div style={{textAlign:"center", width:"100%", fontSize: "20px",  marginTop: "8%" }}>
-                        <Button color="primary" id="buttonSuperFollow" style={{color: "white"}} >
-                            Gestionar SuperFollows
-                        </Button>
-                    </div>
+                </div>
+                <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                    <ConnectPlatformForm color="primary" id="buttonSuperFollow" style={{ color: "white" }}>
+                    </ConnectPlatformForm>
+                    <Button color="primary" id="buttonSuperFollow" style={{ color: "white", marginTop: "8%" }}>
+                        Gestionar SuperFollows
+                    </Button>
+                </div>
                 </div>
             </div>
             
