@@ -29,11 +29,12 @@ export default function FormDialog(props) {
 
    async function makePostRequest(params){
 
-    setState({author:props.user.username})
+    setState({...state, author:props.user.username})
+    console.log(state.author)
 
     var url = "http://localhost:8080/SMON-SERVICE/createPost"
 
-    if((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != ""))){
+    if((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != "")) && (state.author)){
 
       $.ajax({
         url: url,

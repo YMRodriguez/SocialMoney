@@ -19,12 +19,14 @@ import video from '../FallingCoins.mp4';
 import user from '../user.png';
 import user2 from '../user2.png';
 import ButtonAppBar from '../components/ButtonAppBar';
+import VisitProfile from '../components/VisitProfile';
 
 export default class ReduxProvider extends React.Component {
     constructor(props) {
         super(props);
         this.initialState = {
-            user: {} // the user logged
+            user: {}, // the user logged
+            visituser: {} //user visited
         };
         this.store = this.configureStore();
     }
@@ -38,7 +40,8 @@ export default class ReduxProvider extends React.Component {
                     <Route path="/login"><ButtonAppBar logo={logo} user={user} /><LogIn /></Route>
                     <Route path="/signup"><ButtonAppBar logo={logo} user={user} /><SignUp /></Route>
                     <Route path="/postId"><ButtonAppBar logo={logo} user={user} /><FullPost user={user} /></Route>
-                    <Route path="/myprofile"><ButtonAppBar logo={logo} user={user} /><UserProfile user={user} name={"pedro"} /></Route>
+                    <Route path="/searchprofile"><ButtonAppBar logo={logo} user={user} /><VisitProfile user={user}/></Route>
+                    <Route path="/myprofile"><ButtonAppBar logo={logo} user={user} /><UserProfile user={user} /></Route>
                     <Route path="/author"><ButtonAppBar logo={logo} user={user} /><GenericUser user2={user2} name={"Luis"} /></Route>
                 </BrowserRouter>
                 </div>

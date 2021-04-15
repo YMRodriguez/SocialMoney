@@ -9,8 +9,18 @@ function user(state = {}, action = {}) {
     }
 }
 
+function visituser(state = {}, action = {}) {
+    switch(action.type) {
+        case 'USER_VISITED':
+            return action.payload.account;
+        default:
+            return state;
+    }
+}
+
 const GlobalState = (combineReducers({
-    user
+    user,
+    visituser
 }));
 
 export default GlobalState;
