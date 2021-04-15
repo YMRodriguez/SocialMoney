@@ -13,16 +13,19 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import $ from 'jquery'
+import { userLogged } from '../redux/actions';
+import $ from 'jquery';
+import { connect } from 'react-redux';
 
-export default function EditProfileForm() {
+
+function EditProfileForm(props) {
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
-        username: 'yimooo',
         picture: '',
-        description: '',
-        password: '',
-        showprofits: '',
+        username: props.user.username,
+        description: props.user.description,
+        password: props.user.password,
+        showprofits: props.user.showprofits,
         showPassword: '', // This is only relevant to this component.
     });
 
@@ -30,6 +33,7 @@ export default function EditProfileForm() {
     const handleClickShowPassword = () => {
         setState({ ...state, showPassword: !state.showPassword });
     };
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -68,36 +72,40 @@ export default function EditProfileForm() {
 
 
     let error = false;
-    const checkError = (part, state) => {
+    const checkError = (part, data) => {
         switch (part) {
             // We may want to make this more secure in the future.
             case "password":
-                state.length < 8 ? error = true : error = false;
+                data.length < 8 ? error = true : error = false;
                 return error;
         }
     }
 
     async function makePostRequest(params) {
         var url = "http://localhost:8080/SMON-SERVICE/editprofile"
-        //const formData = new FormData();
-        //formData.append("picture", params.picture)
-        //formData.append("dato",
-        //    new Blob([JSON.stringify(
-        //        { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username })], { type: 'application/json' }))
         const formData = new FormData();
         formData.append("picture", params.picture)
         formData.append("data",
             JSON.stringify(
                 { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username }))
-        console.log(formData)
-        var res = async () => await fetch("http://localhost:8080/SMON-SERVICE/editprofile", {
-            method: "POST",
-            body: formData
-        }).then(r =>
-            console.log(r.json())
-            // Need to send the response to the backend
-        )
-        res()
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+            success: function (msg) {
+                if (msg.code == 200) {
+                    let account = JSON.parse(msg.account)
+                    console.log(account)
+                    props.dispatch(userLogged(account))
+                } else {
+                    alert("No se ha podido editar el perfil")
+                }
+            }
+        });
     }
 
     return (
@@ -110,11 +118,11 @@ export default function EditProfileForm() {
                     <DialogContentText>
                         <h2>Foto de perfil</h2>
                     </DialogContentText>
-                    <Input type="file" onChange={handleChangePDF} name="picture"> Suba aquí su nueva foto de perfil</Input>
+                    <Input type="file" onChange={handleChangePDF} name="picture" > Suba aquí su nueva foto de perfil</Input>
                     <DialogContentText>
                         <h2>Descripcion de usuario</h2>
                     </DialogContentText>
-                    <Input type="text" fullWidth onChange={handleChange} name="description" multiline={true}> Suba aquí su nueva foto de perfil</Input>
+                    <Input type="text" fullWidth onChange={handleChange} name="description" multiline={true} value={state.description}> Suba aquí su nueva foto de perfil</Input>
                     <DialogContentText>
                         <h2>Nueva contraseña</h2>
                     </DialogContentText>
@@ -164,3 +172,11 @@ export default function EditProfileForm() {
     );
 }
 
+function mapStateToProps(state) {
+    return {
+        ...state
+    };
+}
+
+//export default App;
+export default connect(mapStateToProps)(EditProfileForm);

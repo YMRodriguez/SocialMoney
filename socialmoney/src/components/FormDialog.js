@@ -26,55 +26,55 @@ export default function FormDialog(props) {
 
   });
 
-   async function makePostRequest(params){
+  async function makePostRequest(params) {
 
-    setState({...state, author:props.user.username})
+    setState({ ...state, author: props.user.username })
     console.log(state.author)
 
     var url = "http://localhost:8080/SMON-SERVICE/createPost"
 
-    if((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != "")) && (state.author)){
+    if ((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != "")) && (state.author)) {
 
       $.ajax({
         url: url,
         type: 'POST',
         data: JSON.stringify(params),
-        async: false, 
+        async: false,
         success: function (msg) {
-            if (msg.code == 200) {
-              handleClose()
-              alert("¡Publicado con éxito!")
-              console.log('Success')
-            }
-            else{
-              alert("Error 404")
-              console.log("Error 404")
-            }
+          if (msg.code == 200) {
+            handleClose()
+            alert("¡Publicado con éxito!")
+            console.log('Success')
+          }
+          else {
+            alert("Error 404")
+            console.log("Error 404")
+          }
         }
-      }); 
+      });
 
     }
-    else{
-      if((state.afun == false) || (state.atec==false) || (state.opinion==false)) {
-          alert("Por favor, seleccione al menos una opción ")
+    else {
+      if ((state.afun == false) || (state.atec == false) || (state.opinion == false)) {
+        alert("Por favor, seleccione al menos una opción ")
       }
 
-     if(state.content== "") {
-          alert("Por favor, rellene un contenido")
-        }
-     if(state.title== "") {
-          alert("Por favor, rellene un titulo")
+      if (state.content == "") {
+        alert("Por favor, rellene un contenido")
       }
-    } 
-  } 
- 
+      if (state.title == "") {
+        alert("Por favor, rellene un titulo")
+      }
+    }
+  }
 
-    const handleSubmit = () =>{
+
+  const handleSubmit = () => {
     setTimeout(() => {
-      makePostRequest(state) 
+      makePostRequest(state)
     }, 100);
   };
- 
+
 
 
   const handleChange = (event) => {
@@ -133,6 +133,7 @@ export default function FormDialog(props) {
             label="Contenido"
             type="text"
             fullWidth
+            multiline={true}
           />
         </DialogContent>
         <FormControl required error={error} component="fieldset" style={{ marginLeft: "5%", marginTop: "1%" }}>
