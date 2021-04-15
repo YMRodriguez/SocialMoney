@@ -22,6 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
 import { userLogged } from '../redux/actions';
+import {connect} from 'react-redux';
 
 function Copyright() {
     return (
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function LogIn() {
+function LogIn(props) {
     const history = useHistory();
     const classes = useStyles();
 
@@ -112,7 +113,8 @@ export default function LogIn() {
             success: function (msg) {
                 if (msg.code == 200) {
                     history.push("/feed")
-                    props.dispatch(userLogged(msg.account))
+                    let account = JSON.parse(msg.account)
+                    props.dispatch(userLogged(account))
                 } else {
                     alert("Usuario incorrecto")
                 }

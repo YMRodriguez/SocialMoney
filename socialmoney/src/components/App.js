@@ -23,7 +23,7 @@ function App(props) {
       <div style={{ display: "flex", flexDirection: "column", width: "30%", marginTop: "1%", height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div style={{ width: "40%", marginTop: "2%" }}><img src={user} style={{ width: "80%", float: "left", marginLeft: "40%" }} /></div>
-          <div style={{ width: "60%", textAlign: "center" }}><h2 style={{ marginTop: "30%" }}> @Pedro</h2></div>
+          <div style={{ width: "60%", textAlign: "center" }}><h2 style={{ marginTop: "30%" }}>@{props.user.username}</h2></div>
         </div>
         <div style={{ marginTop: "10%" }}>
           <FormDialog variant="contained" textColor="white" color="primary" user = {props.user} >

@@ -14,7 +14,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import $ from 'jquery'
 
-export default function FormDialog() {
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     opinion: false,
@@ -23,11 +23,13 @@ export default function FormDialog() {
     comm: false,
     title: "",
     content: "",
-    author: "manolo" 
+    author: "",
 
   });
 
    async function makePostRequest(params){
+
+    setState({author:props.user.username})
 
     var url = "http://localhost:8080/SMON-SERVICE/createPost"
 
