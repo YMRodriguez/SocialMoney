@@ -18,7 +18,7 @@ import $ from 'jquery'
 export default function EditProfileForm() {
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
-        username: '',
+        username: 'yimooo',
         picture: '',
         description: '',
         password: '',
@@ -55,6 +55,7 @@ export default function EditProfileForm() {
             alert("Tiene que rellenar todos los campos.")
         } else {
             setTimeout(() => {
+                console.log(state)
                 makePostRequest(state)
             }, 100);
         }
@@ -78,29 +79,25 @@ export default function EditProfileForm() {
 
     async function makePostRequest(params) {
         var url = "http://localhost:8080/SMON-SERVICE/editprofile"
+        //const formData = new FormData();
+        //formData.append("picture", params.picture)
+        //formData.append("dato",
+        //    new Blob([JSON.stringify(
+        //        { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username })], { type: 'application/json' }))
         const formData = new FormData();
         formData.append("picture", params.picture)
-        formData.append("dato",
-            new Blob([JSON.stringify(
-                { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username })], { type: 'application/json' }))
-                console.log(formData)
-                $.ajax({
-            processData: false,  // tell jQuery not to process the data
-            contentType: false ,
-            url: url,
-            cache: false,
-            enctype:"mutipart/form-data",
-            type: 'POST',
-            data: formData,
-            async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
-            success: function (msg) {
-                if (msg.code == 200) {
-                    console.log("Success")
-                } else {
-                    alert("Usuario incorrecto")
-                }
-            }
-        });
+        formData.append("data",
+            JSON.stringify(
+                { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username }))
+        console.log(formData)
+        var res = async () => await fetch("http://localhost:8080/SMON-SERVICE/editprofile", {
+            method: "POST",
+            body: formData
+        }).then(r =>
+            console.log(r.json())
+            // Need to send the response to the backend
+        )
+        res()
     }
 
     return (
@@ -113,11 +110,11 @@ export default function EditProfileForm() {
                     <DialogContentText>
                         <h2>Foto de perfil</h2>
                     </DialogContentText>
-                    <Input type="file" onChange={handleChangePDF} name="image"> Suba aquí su nueva foto de perfil</Input>
+                    <Input type="file" onChange={handleChangePDF} name="picture"> Suba aquí su nueva foto de perfil</Input>
                     <DialogContentText>
                         <h2>Descripcion de usuario</h2>
                     </DialogContentText>
-                    <Input type="text" fullWidth onChange={handleChange} name="image" multiline={true}> Suba aquí su nueva foto de perfil</Input>
+                    <Input type="text" fullWidth onChange={handleChange} name="description" multiline={true}> Suba aquí su nueva foto de perfil</Input>
                     <DialogContentText>
                         <h2>Nueva contraseña</h2>
                     </DialogContentText>
