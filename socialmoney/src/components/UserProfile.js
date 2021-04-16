@@ -7,13 +7,17 @@ import EditProfileForm from "./EditProfileForm.js";
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
+import { useHistory } from "react-router-dom";
+
 
 
 class UserProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [] }
+       // const history = useHistory();
+        this.state = { posts: [],
+                    reset: false }
     }
 
     async componentDidMount() {
@@ -25,13 +29,11 @@ class UserProfile extends React.Component {
             success: function (msg) {
                 if (msg.code == 200) {
                     let receivedposts = JSON.parse(msg.postList)
-                    alert("¡Posts recogidos con éxito!")
                     console.log('Success')
                     console.log(receivedposts);
                     this.setState({ posts: receivedposts })
                 }
                 else if (msg.code == 204) {
-                    alert("¡Posts recogidos con éxito!")
                     console.log('Success')
                 }
                 else {
@@ -41,8 +43,55 @@ class UserProfile extends React.Component {
         });
     }
 
+     /* fetchPosts = () => {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/publications",
+            type: 'POST',
+            data: JSON.stringify({ username: this.props.user.username }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    let receivedposts = JSON.parse(msg.postList)
+                    console.log('Success')
+                    console.log(receivedposts);
+                    this.setState({ posts: receivedposts })
+                }
+                else if (msg.code == 204) {
+                    console.log('Success')
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        });
+
+
+    }  */
+/* 
+    fetchPublications(p){
+                                     
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/deletePost",
+            type: 'POST',
+            data: JSON.stringify({ id: p.id }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    alert("¡Borrados con éxito!")
+                    console.log('Success')
+                    this.history.push("/myprofile")
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }
+       })
+    } */
+
 
     render() {
+
+
         return (
             <div style={{ display: "flex", flexDirection: "columns" }}>
                 <div style={{ width: "80%" }}>
@@ -76,6 +125,8 @@ class UserProfile extends React.Component {
                                 <Post publication={p}
                                     index={i}
                                     className="post"
+                                    allowbutton = {true}
+                                    onPressButton= {()=>this.fetchPublications(p)}
                                 />
                             )
                         }) : <p>No hay publicaciones aún de este usuario</p>}

@@ -22,6 +22,8 @@ const useStyles = makeStyles({
 
 export default function Post(props) {
     const classes = useStyles();
+if(props.allowbutton){
+
 
     return (
         <Card id="card" variant="outlined">
@@ -45,11 +47,57 @@ export default function Post(props) {
                     <Button size="small" color="primary" id="linktoarticle">
                         Go to full article
                     </Button>
+        
+
+                    
                 </Link>
+
+
+                <button  onClick= {() => props.onPressButton()} size="small" color="primary" id="linktoarticle">
+                    REMOVE
+                </button>
+        
+{/*                 <Link to="/author">
+                    <UserAvatar user={props.author} id="avatar" />
+                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  
+
+
+                
+            </CardActions>
+        </Card>
+    );
+
+}
+else{
+    return (
+        <Card id="card" variant="outlined">
+            <CardActionArea>
+                <CardMedia
+                    id="media"
+                    image={props.user2}
+                    title="User"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {props.publication.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        {props.publication.content}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions id="cardactions">
+                <Link to="/postId">
+                    <Button size="small" color="primary" id="linktoarticle">
+                        Go to full article
+                    </Button>
+                    </Link>
 {/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
                 </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  
             </CardActions>
         </Card>
     );
+    
+}
 }

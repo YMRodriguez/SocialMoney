@@ -28,8 +28,6 @@ export default function FormDialog(props) {
 
   async function makePostRequest(params) {
 
-
-    setState({ ...state, author: props.user.username })
     console.log(state.author)
 
     var url = "http://localhost:8080/SMON-SERVICE/createPost"
@@ -56,7 +54,7 @@ export default function FormDialog(props) {
 
     }
     else {
-      if ((state.afun == false) || (state.atec == false) || (state.opinion == false)) {
+      if (!(state.afun && state.atec && state.opinion)) {
         alert("Por favor, seleccione al menos una opción ")
       }
 
@@ -89,10 +87,11 @@ export default function FormDialog(props) {
 
 
 
-  const { opinion, atec, afun, comm } = state;
-  const error = [opinion, atec, afun].filter((v) => v).length < 1;
+  /*const { opinion, atec, afun, comm } = state;*/
+  const error = [state.opinion, state.atec, state.afun].filter((v) => v).length < 1;
 
   const handleClickOpen = () => {
+    setState({ ...state, author: props.user.username })
     setOpen(true);
   };
 
@@ -141,15 +140,15 @@ export default function FormDialog(props) {
           <FormLabel component="legend">Seleccione al menos una opción</FormLabel>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={opinion} onChange={handleChange} name="opinion" />}
+              control={<Checkbox checked={state.opinion} onChange={handleChange} name="opinion" />}
               label="Opinión"
             />
             <FormControlLabel
-              control={<Checkbox checked={atec} onChange={handleChange} name="atec" />}
+              control={<Checkbox checked={state.atec} onChange={handleChange} name="atec" />}
               label="Análisis Técnico"
             />
             <FormControlLabel
-              control={<Checkbox checked={afun} onChange={handleChange} name="afun" />}
+              control={<Checkbox checked={state.afun} onChange={handleChange} name="afun" />}
               label="Análisis Fundamental"
             />
           </FormGroup>
@@ -158,7 +157,7 @@ export default function FormDialog(props) {
           <FormLabel component="legend">Indique si este post es exclusivo de comunidad</FormLabel>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={comm} onChange={handleChange} name="comm" />}
+              control={<Checkbox checked={state.comm} onChange={handleChange} name="comm" />}
               label="Sólo comunidad"
             />
           </FormGroup>
