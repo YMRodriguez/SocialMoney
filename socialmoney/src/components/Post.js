@@ -33,11 +33,10 @@ export default function Post(props) {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Invest in Tesla
+                        {props.publication.title}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
+                        {props.publication.content}
                     </Typography>
                 </CardContent>
             </CardActionArea>
@@ -47,9 +46,9 @@ export default function Post(props) {
                         Go to full article
                     </Button>
                 </Link>
-                <Link to="/author">
+{/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
-                </Link>
+                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  
             </CardActions>
         </Card>
     );

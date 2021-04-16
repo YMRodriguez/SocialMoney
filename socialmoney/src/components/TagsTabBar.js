@@ -54,15 +54,15 @@ export default function TagsTabBar(props) {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} id="tagpanel" style={{ width: "100%" }}>
-                <Post author={props.data} className="post" />
-                <Post author={props.data} className="post" />
+                <Post author={props.data} publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
+                <Post author={props.data} publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
             </TabPanel>
             <TabPanel value={value} index={1} id="tagpanel" style={{ width: "100%" }}>
-                <Post author={props.data} className="post" />
-                <Post author={props.data} className="post" />
+            <Post author={props.data} publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
+            <Post author={props.data} publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
             </TabPanel>
             <TabPanel value={value} index={2} id="tagpanel" style={{ width: "100%" }}>
-                <Post author={props.data} className="post" />
+            <Post author={props.data} publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
             </TabPanel>
         </div>
     );

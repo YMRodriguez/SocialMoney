@@ -37,7 +37,7 @@ class UserProfile extends React.Component {
                 else {
                     console.log("Error 404")
                 }
-            }
+            }.bind(this)
         });
     }
 
@@ -71,9 +71,9 @@ class UserProfile extends React.Component {
                         </div>
                     </div>
                     <div id="posts">
-                        {(this.state.posts.length != 0) ? this.state.posts.map((post, i) => {
+                        {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
                             return (
-                                <Post post={post[i]}
+                                <Post publication={p}
                                     index={i}
                                     className="post"
                                 />

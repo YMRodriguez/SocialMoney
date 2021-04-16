@@ -115,6 +115,7 @@ function LogIn(props) {
                     history.push("/feed")
                     let account = JSON.parse(msg.account)
                     props.dispatch(userLogged(account))
+                    console.log(account)
                 } else {
                     alert("Usuario incorrecto")
                 }

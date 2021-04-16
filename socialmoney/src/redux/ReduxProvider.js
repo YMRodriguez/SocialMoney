@@ -40,7 +40,7 @@ export default class ReduxProvider extends React.Component {
                     <Route path="/login"><ButtonAppBar logo={logo} user={user} /><LogIn /></Route>
                     <Route path="/signup"><ButtonAppBar logo={logo} user={user} /><SignUp /></Route>
                     <Route path="/postId"><ButtonAppBar logo={logo} user={user} /><FullPost user={user} /></Route>
-                    <Route path="/searchprofile"><ButtonAppBar logo={logo} user={user} /><VisitProfile user={user}/></Route>
+                    <Route path="/searchprofile"><ButtonAppBar logo={logo} user={user} /><VisitProfile/></Route>
                     <Route path="/myprofile"><ButtonAppBar logo={logo} user={user} /><UserProfile user={user} /></Route>
                     <Route path="/author"><ButtonAppBar logo={logo} user={user} /><GenericUser user2={user2} name={"Luis"} /></Route>
                 </BrowserRouter>
