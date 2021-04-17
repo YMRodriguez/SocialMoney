@@ -22,18 +22,13 @@ export default function FormDialog(props) {
     comm: false,
     title: "",
     content: "",
-    author: "",
-
+    author: ""
   });
 
   async function makePostRequest(params) {
-
-    console.log(state.author)
-
     var url = "http://localhost:8080/SMON-SERVICE/createPost"
 
     if ((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != "")) && (state.author)) {
-
       $.ajax({
         url: url,
         type: 'POST',
@@ -51,13 +46,11 @@ export default function FormDialog(props) {
           }
         }
       });
-
     }
     else {
       if (!(state.afun && state.atec && state.opinion)) {
         alert("Por favor, seleccione al menos una opción ")
       }
-
       if (state.content == "") {
         alert("Por favor, rellene un contenido")
       }
@@ -84,10 +77,6 @@ export default function FormDialog(props) {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-
-
-
-  /*const { opinion, atec, afun, comm } = state;*/
   const error = [state.opinion, state.atec, state.afun].filter((v) => v).length < 1;
 
   const handleClickOpen = () => {

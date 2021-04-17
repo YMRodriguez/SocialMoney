@@ -7,20 +7,22 @@ import EditProfileForm from "./EditProfileForm.js";
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
-import { useHistory } from "react-router-dom";
-
 
 
 class UserProfile extends React.Component {
 
     constructor(props) {
         super(props);
-       // const history = useHistory();
-        this.state = { posts: [],
-                    reset: false }
+        this.state = {
+            posts: [],
+        }
     }
 
     async componentDidMount() {
+        this.fetchPosts();
+    }
+
+    fetchPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/publications",
             type: 'POST',
@@ -43,33 +45,7 @@ class UserProfile extends React.Component {
         });
     }
 
-     /* fetchPosts = () => {
-        $.ajax({
-            url: "http://localhost:8080/SMON-SERVICE/publications",
-            type: 'POST',
-            data: JSON.stringify({ username: this.props.user.username }),
-            async: false,
-            success: function (msg) {
-                if (msg.code == 200) {
-                    let receivedposts = JSON.parse(msg.postList)
-                    console.log('Success')
-                    console.log(receivedposts);
-                    this.setState({ posts: receivedposts })
-                }
-                else if (msg.code == 204) {
-                    console.log('Success')
-                }
-                else {
-                    console.log("Error 404")
-                }
-            }.bind(this)
-        });
-
-
-    }  */
-/* 
-    fetchPublications(p){
-                                     
+    fetchPublications(p) {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/deletePost",
             type: 'POST',
@@ -79,19 +55,17 @@ class UserProfile extends React.Component {
                 if (msg.code == 200) {
                     alert("¡Borrados con éxito!")
                     console.log('Success')
-                    this.history.push("/myprofile")
                 }
                 else {
                     console.log("Error 404")
                 }
             }
-       })
-    } */
+        })
+        this.fetchPosts();
+    }
 
 
     render() {
-
-
         return (
             <div style={{ display: "flex", flexDirection: "columns" }}>
                 <div style={{ width: "80%" }}>
@@ -125,8 +99,8 @@ class UserProfile extends React.Component {
                                 <Post publication={p}
                                     index={i}
                                     className="post"
-                                    allowbutton = {true}
-                                    onPressButton= {()=>this.fetchPublications(p)}
+                                    allowbutton={true}
+                                    onPressButton={() => this.fetchPublications(p)}
                                 />
                             )
                         }) : <p>No hay publicaciones aún de este usuario</p>}
@@ -134,7 +108,7 @@ class UserProfile extends React.Component {
                 </div>
                 <div style={{ width: "20%" }}>
                     <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                        <div>Publicaciones<div>N</div></div>
+                        <div>Publicaciones<div>{this.state.posts.length}</div></div>
                     </div>
                     <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                         <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>
