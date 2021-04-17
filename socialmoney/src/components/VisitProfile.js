@@ -80,7 +80,7 @@ class VisitProfile extends React.Component {
                     </div>
                     <div style={{ width: "20%" }}>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                            <div>Publicaciones<div>N</div></div>
+                            <div>Publicaciones<div>{this.state.posts.length}</div></div>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                             <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>

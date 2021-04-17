@@ -20,6 +20,7 @@ import { connect } from 'react-redux';
 
 function EditProfileForm(props) {
     const [open, setOpen] = React.useState(false);
+    // Don't think we may include redux state inside the initial state. TODO, fix in Sprint 3.
     const [state, setState] = React.useState({
         picture: '',
         username: props.user.username,
@@ -99,6 +100,9 @@ function EditProfileForm(props) {
             success: function (msg) {
                 if (msg.code == 200) {
                     let account = JSON.parse(msg.account)
+                    let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
+                    // This is kind of a dirty fix and should be a generic method.
+                    account.picture = base64String
                     console.log(account)
                     props.dispatch(userLogged(account))
                 } else {

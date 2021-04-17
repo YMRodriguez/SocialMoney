@@ -22,7 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
 import { userLogged } from '../redux/actions';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 function Copyright() {
     return (
@@ -114,6 +114,9 @@ function LogIn(props) {
                 if (msg.code == 200) {
                     history.push("/feed")
                     let account = JSON.parse(msg.account)
+                    let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
+                    // This is kind of a dirty fix and should be a generic method.
+                    account.picture = base64String
                     props.dispatch(userLogged(account))
                     console.log(account)
                 } else {
@@ -204,9 +207,9 @@ function LogIn(props) {
 
 function mapStateToProps(state) {
     return {
-      ...state
+        ...state
     };
-  }
-  
-  //export default App;
-  export default connect(mapStateToProps)(LogIn);
+}
+
+//export default App;
+export default connect(mapStateToProps)(LogIn);
