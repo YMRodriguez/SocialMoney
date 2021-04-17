@@ -33,7 +33,7 @@ function GenericUser(props) {
                     </div>
                 </div>
                 <div id="posts">
-                    <Post></Post>
+                <Post publication = {{title: "Invest in Tesla", content:"Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"}} className="post" />
                 </div>
             </div>
             <div style={{width: "20%"}}>

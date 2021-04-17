@@ -167,6 +167,12 @@ h1 {
   background: linear-gradient(90deg, rgba(19,136,6,1) 0%, rgba(255,255,255,1) 100%);
 }
 
+#appbarNoSearch {
+  display: flex;
+  justify-content: flex-end;
+  background: linear-gradient(90deg, rgba(19,136,6,1) 0%, rgba(255,255,255,1) 100%);
+}
+
 #cardactions {
   display: flex;
   justify-content: space-between;

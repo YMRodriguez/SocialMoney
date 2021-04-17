@@ -12,13 +12,22 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import $ from 'jquery'
 
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
             <Button color="inherit" href="https://material-ui.com/">
-                Your Website
+                SOCIALMONEY S.L
             </Button>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -47,7 +56,76 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+    const history = useHistory();
     const classes = useStyles();
+    const [state, setState] = React.useState({
+        username: "",
+        password: "",
+        age: "",
+        name: "",
+        showPassword: false,
+    });
+
+    // Password handlers.
+    const handleClickShowPassword = () => {
+        setState({ ...state, showPassword: !state.showPassword });
+    };
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    // Helper to submit.
+    let checker = arr => arr.every(v => v === false);
+    let errors = [false, false, false, false];
+
+    const handleSubmit = () => {
+        if (checker(errors)) {
+            setTimeout(() => {
+                makePostRequest(state)
+            }, 100);
+        } else {
+            alert("Complete los campos necesarios antes de crear la cuenta.")
+        }
+    };
+
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value });
+    }
+
+    const checkError = (part, state) => {
+        switch (part) {
+            case "name":
+                state.length < 5 ? errors[0] = true : errors[0] = false;
+                return errors[0];
+            case "age":
+                state.length <1 || parseInt(state) < 18 ? errors[1] = true : errors[1] = false;
+                return errors[1];
+            // We may want to make this more secure in the future.
+            case "username":
+                state.length < 5 ? errors[2] = true : errors[2] = false;
+                return errors[2];
+            case "password":
+                state.length < 8 ? errors[3] = true : errors[3] = false;
+                return errors[3];
+        }
+    }
+
+    async function makePostRequest(params) {
+        var url = "http://localhost:8080/SMON-SERVICE/signup"
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(params),
+            async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
+            success: function (msg) {
+                if (msg.code == 200) {
+                    history.push("/login")
+                } else {
+                    alert(msg.mensaje)
+                }
+            }
+        });
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -61,62 +139,76 @@ export default function SignUp() {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
-                                autoComplete="fname"
-                                name="firstName"
+                                onChange={handleChange}
+                                error={checkError("name", state.name)}
+                                autoComplete="name"
+                                name="name"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                id="name"
+                                label="Nombre y apellidos"
                                 autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                helperText="Introduzca su nombre y apellidos"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                onChange={handleChange}
                                 variant="outlined"
-                                type="date"
+                                error={checkError("age", state.age)}
                                 required
                                 fullWidth
-                                id="birthdate"
-                                label="YYYY-MM-DD"
-                                name="birthDate"
+                                type="number"
+                                id="age"
+                                name="age"
+                                label="Edad"
+                                helperText="Intruzca su edad, debe ser mayor de 18 años"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                onChange={handleChange}
                                 variant="outlined"
+                                error={checkError("username", state.username)}
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="Nombre de usuario"
+                                name="username"
+                                autoComplete="username"
+                                helperText="Será su identificador dentro en la aplicación, debe tener al menos 5 caracteres"
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
+                            <InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+                            <OutlinedInput
                                 id="password"
+                                name="password"
+                                fullWidth
+                                type={state.showPassword ? 'text' : 'password'}
+                                value={state.password}
+                                error={checkError("password", state.password)}
+                                label="Contraseña"
                                 autoComplete="current-password"
+                                onChange={handleChange}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                labelWidth={70}
                             />
+                            <FormHelperText id="standard-weight-helper-text">Su contraseña debe tener al menos 8 caracteres</FormHelperText>
                         </Grid>
                     </Grid>
                     <Button
@@ -124,7 +216,7 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={() => console.log("hola")}
+                        onClick={handleSubmit}
                     >
                         Sign Up
                     </Button>
@@ -133,7 +225,7 @@ export default function SignUp() {
                             <Link to='/login'>
                                 <Button href="#" variant="body2">
                                     Already have an account? Sign in
-                            </Button>
+                                </Button>
                             </Link>
                         </Grid>
                     </Grid>
