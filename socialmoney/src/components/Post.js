@@ -23,8 +23,6 @@ const useStyles = makeStyles({
 export default function Post(props) {
     const classes = useStyles();
 if(props.allowbutton){
-
-
     return (
         <Card id="card" variant="outlined">
             <CardActionArea>
