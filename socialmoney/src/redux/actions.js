@@ -5,3 +5,19 @@ export function userLogged(account){
 export function userVisited(account){
     return {type: 'USER_VISITED', payload:{account}}
 }
+
+export function userFollows(follows){
+    return {type: 'USER_FOLLOWS', payload:{follows}}
+}
+
+export function userFollowers(follows){
+    return {type: 'USER_FOLLOWERS', payload:{follows}}
+}
+
+export function visitFollows(follows){
+    return {type: 'VISIT_FOLLOWS', payload:{follows}}
+}
+
+export function visitFollowers(follows){
+    return {type: 'VISIT_FOLLOWERS', payload:{follows}}
+}

@@ -84,10 +84,10 @@ class UserProfile extends React.Component {
                                 <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }} user={this.props.user}>
                                 </EditProfileForm>
                                 <div id="followItem">
-                                    <div>Seguidores<div style={{ textAlign: "center" }}>N</div></div>
+                                    <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.userfollows.length}</div></div>
                                 </div>
                                 <div id="followItem">
-                                    <div>Seguidos<div style={{ textAlign: "center" }}>N</div></div>
+                                    <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.userfollowers.length}</div></div>
                                 </div>
                             </div>
                             <div style={{ textAlign: "center" }}><h2>{this.props.user.description}</h2></div>
