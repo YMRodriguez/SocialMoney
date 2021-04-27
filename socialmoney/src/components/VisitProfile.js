@@ -5,16 +5,86 @@ import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
+import { userFollowers, userFollows, visitFollowers, visitFollows } from '../redux/actions';
+import { RepeatRounded } from "@material-ui/icons";
 
 class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [] }
+        this.state = { posts: [], buttonstate: false }
     }
 
     async componentDidMount() {
         this.fetchPosts();
+    }
+
+    follow() {
+        if (this.props.userfollows.length > 0) {
+            console.log(this.state.buttonstate)
+            let follow = this.props.userfollows.filter(u => u.username == this.props.visituser.username)
+            if (follow.length>0){
+                console.log(follow)
+                this.setState({buttonstate: true})
+            }
+            else {
+                console.log(follow)
+                this.setState({buttonstate: false})}
+        }
+    }
+ 
+    fetchfollow() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/follow",
+            type: 'POST',
+            data: JSON.stringify({username: this.props.user.username, followed: this.props.visituser.username }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1,JSON.parse(msg.userFollows).userFollows.length-1)
+                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
+                    let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1,JSON.parse(msg.visitFollows).userFollows.length-1)
+                    let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
+
+                    if (followers.length != 0){
+                        this.props.dispatch(userFollowers(followers.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(userFollowers([]))
+                    }
+
+                    if (follows.length != 0){
+                        this.props.dispatch(userFollows(follows.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(userFollows([]))
+                    }
+
+                    if (visitfollowers.length != 0){
+                        this.props.dispatch(visitFollowers(visitfollowers.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(visitFollowers([]))
+                    }
+
+                    if (visitfollows.length != 0){
+                        this.props.dispatch(visitFollows(visitfollows.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(visitFollows([]))
+                    }
+
+                    this.follow()
+
+                    console.log(follows)
+                    console.log(visitfollowers)
+
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        });
     }
 
     fetchPosts() {
@@ -58,10 +128,10 @@ class VisitProfile extends React.Component {
                             <div id="userHeader">
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
                                     <div id="followItem">
-                                        <div>Seguidores<div style={{ textAlign: "center" }}>N</div></div>
+                                        <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.visitfollows.length}</div></div>
                                     </div>
                                     <div id="followItem">
-                                        <div>Seguidos<div style={{ textAlign: "center" }}>N</div></div>
+                                        <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.visitfollowers.length}</div></div>
                                     </div>
                                 </div>
                                 <div style={{ textAlign: "center" }}><h2>{this.props.visituser.description}</h2></div>
@@ -84,8 +154,8 @@ class VisitProfile extends React.Component {
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                             <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>
-                                <Button color="primary" id="buttonSuperFollow" style={{ color: "white" }}>
-                                    Seguir
+                                <Button color="primary" id="buttonSuperFollow" onClick={() => {this.fetchfollow()}} style={{ color: "white" }}>
+                                    {this.state.buttonstate? "Dejar de seguir" : "Seguir"}
                                 </Button>
                             </div>
                         </div>
