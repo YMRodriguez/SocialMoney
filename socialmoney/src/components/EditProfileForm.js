@@ -16,10 +16,14 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { userLogged } from '../redux/actions';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import { useHistory } from "react-router-dom";
+
 
 
 function EditProfileForm(props) {
+    const history = useHistory();
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
     // Don't think we may include redux state inside the initial state. TODO, fix in Sprint 3.
     const [state, setState] = React.useState({
         picture: '',
@@ -28,6 +32,8 @@ function EditProfileForm(props) {
         password: props.user.password,
         showprofits: props.user.showprofits,
         showPassword: '', // This is only relevant to this component.
+        passwordDelete: '',
+        options : 0
     });
 
     // Password handlers.
@@ -43,6 +49,10 @@ function EditProfileForm(props) {
         setState({ ...state, [event.target.name]: event.target.value });
     };
 
+  /*   const handleChange2 = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value });
+    }; */
+
     const handleChangePDF = (event) => {
         setState({ ...state, [event.target.name]: event.target.files[0] });
     };
@@ -51,8 +61,34 @@ function EditProfileForm(props) {
         setOpen(true);
     };
 
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
+
+    
+
+
+    const handleClickDelete = () => {
+        console.log(state.passwordDelete)
+        var mensaje = window.confirm("¿Está seguro de eliminar su cuenta y sus posts?");
+
+        if (mensaje && (state.passwordDelete == props.user.password) ){
+            makeDeleteAccount(state)
+        }
+        
+        if (mensaje && (state.passwordDelete != props.user.password)){
+            alert("Campo contraseña mal introducido")
+        }
+        else{
+        } 
+    };
+
     const handleCloseCancelling = () => {
         setOpen(false);
+    };
+
+    const handleCloseCancelling2 = () => {
+        setOpen2(false);
     };
 
     const handleCloseConecting = () => {
@@ -112,11 +148,39 @@ function EditProfileForm(props) {
         });
     }
 
+
+    async function makeDeleteAccount(params) {
+        var url = "http://localhost:8080/SMON-SERVICE/deleteAccount"
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(params),
+            contentType: false,
+            processData: false,
+            async: false, 
+            success: function (msg) {
+                if (msg.code == 200) {
+                    alert("Cuenta y posts borrados con exito\n¡Nos vemos pronto!")
+                    history.push("/")
+
+                } else {
+                    alert("No se ha podido borrar la cuenta. Intentelo más tarde")
+                }
+            }
+        });
+    }
+
     return (
         <div>
-            <Button onClick={handleClickOpen} id="buttonSuperFollow" style={{ color: "white", width: "80%" }}>
+            <Button onClick={handleClickOpen} id="buttonSuperFollow" style={{ color: "white", width: "35%" }}>
                 Editar perfil
             </Button>
+
+            <Button onClick={handleClickOpen2} id="buttonDelete" style={{ backgroundColor: 'red', color: "white", width: "35%" }}>
+                Eliminar perfil
+            </Button>
+
+
             <Dialog paperWidthLg open={open} fullWidth={true} aria-labelledby="form-dialog-title" style={{ color: "white", width: "80%" }}>
                 <DialogContent>
                     <DialogContentText>
@@ -157,6 +221,7 @@ function EditProfileForm(props) {
                     <FormHelperText id="standard-weight-helper-text">Su contraseña debe tener al menos 8 caracteres</FormHelperText>
                     <DialogContentText>
                         <h2>Opciones de usuario</h2>
+
                     </DialogContentText>
                     <FormControlLabel
                         control={<Checkbox checked={state.showprofits} onChange={handleChangeProfits} name="showprofits" />}
@@ -172,6 +237,47 @@ function EditProfileForm(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <Dialog paperWidthLg open={open2} fullWidth={true} aria-labelledby="form-dialog-title" style={{ color: "white", width: "80%" }}>
+                <DialogContent>
+                    <DialogContentText>
+                        <h2>Para eliminar cuenta y posts introduzca la contraseña de su cuenta</h2>
+                    </DialogContentText>
+                    <OutlinedInput
+                        id="passwordDelete"
+                        name="passwordDelete"
+                        fullWidth
+                        type={state.showPassword ? 'text' : 'password'}
+                        value={state.passwordDelete}
+                        label="Contraseña2"
+                        onChange={handleChange}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        labelWidth={70}
+                    />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseCancelling2} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleClickDelete} color="primary">
+                            Eliminar cuenta
+                        </Button>
+                </DialogActions>
+            </Dialog>
+
+
+
         </div>
     );
 }
