@@ -105,8 +105,13 @@ function LogIn(props) {
     async function makePostRequest(params) {
 
         var url = "http://localhost:8080/SMON-SERVICE/login"
+        
         $.ajax({
             url: url,
+            xhrFields: {
+                withCredentials: true
+             },
+            crossDomain: true,
             type: 'POST',
             data: JSON.stringify(params),
             async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
