@@ -12,6 +12,7 @@
     "antd": "^4.13.1",
     "ityped": "^1.0.3",
     "jquery": "^3.6.0",
+    "pidcrypt": "0.0.32",
     "react": "^17.0.1",
     "react-awesome-button": "^6.5.1",
     "react-dom": "^17.0.1",

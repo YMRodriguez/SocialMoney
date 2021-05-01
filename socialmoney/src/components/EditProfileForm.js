@@ -29,7 +29,7 @@ function EditProfileForm(props) {
         picture: '',
         username: props.user.username,
         description: props.user.description,
-        password: props.user.password,
+        password: "",
         showprofits: props.user.showprofits,
         showPassword: '', // This is only relevant to this component.
         passwordDelete: '',
@@ -72,12 +72,8 @@ function EditProfileForm(props) {
         console.log(state.passwordDelete)
         var mensaje = window.confirm("¿Está seguro de eliminar su cuenta y sus posts?");
 
-        if (mensaje && (state.passwordDelete == props.user.password) ){
+        if (mensaje){
             makeDeleteAccount(state)
-        }
-        
-        if (mensaje && (state.passwordDelete != props.user.password)){
-            alert("Campo contraseña mal introducido")
         }
         else{
         } 
@@ -119,6 +115,22 @@ function EditProfileForm(props) {
     }
 
     async function makePostRequest(params) {
+        console.log(params.password.length)
+        if (params.password.length > 0) {
+        var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
+        var pidCrypt = require("pidcrypt")
+        require("pidcrypt/rsa")
+        
+        var rsa = new pidCrypt.RSA();
+        var pidCryptUtil = require("pidcrypt/pidcrypt_util")
+        var pem = pidCryptUtil.decodeBase64(pub_key);
+        require("pidcrypt/asn1")
+        var asn = pidCrypt.ASN1.decode(pidCryptUtil.toByteArray(pem));
+        var tree = asn.toHexTree();
+        rsa.setPublicKeyFromASN(tree);
+        var crypted = rsa.encrypt(params.password);
+        params.password = crypted;
+        }
         var url = "http://localhost:8080/SMON-SERVICE/editprofile"
         const formData = new FormData();
         formData.append("picture", params.picture)
@@ -150,6 +162,20 @@ function EditProfileForm(props) {
 
 
     async function makeDeleteAccount(params) {
+        var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
+        var pidCrypt = require("pidcrypt")
+        require("pidcrypt/rsa")
+        
+        var rsa = new pidCrypt.RSA();
+        var pidCryptUtil = require("pidcrypt/pidcrypt_util")
+        var pem = pidCryptUtil.decodeBase64(pub_key);
+        require("pidcrypt/asn1")
+        var asn = pidCrypt.ASN1.decode(pidCryptUtil.toByteArray(pem));
+        var tree = asn.toHexTree();
+        rsa.setPublicKeyFromASN(tree);
+        var crypted = rsa.encrypt(params.passwordDelete);
+        params.passwordDelete = crypted;
+        console.log(JSON.stringify(params))
         var url = "http://localhost:8080/SMON-SERVICE/deleteAccount"
         $.ajax({
             url: url,
@@ -199,7 +225,6 @@ function EditProfileForm(props) {
                         name="password"
                         fullWidth
                         type={state.showPassword ? 'text' : 'password'}
-                        value={state.password}
                         error={checkError("password", state.password)}
                         label="Contraseña"
                         autoComplete="current-password"
