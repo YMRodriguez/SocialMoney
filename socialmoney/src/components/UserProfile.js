@@ -15,11 +15,14 @@ class UserProfile extends React.Component {
         super(props);
         this.state = {
             posts: [],
+            follows: [],
+            followers: []
         }
     }
 
     async componentDidMount() {
         this.fetchPosts();
+        this.fetchFollows()
     }
 
     fetchPosts() {
@@ -64,6 +67,41 @@ class UserProfile extends React.Component {
         this.fetchPosts();
     }
 
+    fetchFollows() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/showfollows",
+            type: 'POST',
+            data: JSON.stringify({ username: this.props.user.username, myusername:"usernamenoexists"}),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log('Success')
+                    let follows = JSON.parse(msg.userfollows).userFollows.substring(1,JSON.parse(msg.userfollows).userFollows.length-1)
+                    let followers = JSON.parse(msg.userfollows).userFollowers.substring(1,JSON.parse(msg.userfollows).userFollowers.length-1)
+
+                    if (followers.length != 0){
+                        this.setState({followers: followers.split(",")})
+                    }
+                    else {
+                        this.setState({followers: []})
+                    }
+
+                    if (follows.length != 0){
+                        this.setState({follows: follows.split(",")})
+                    }
+                    else {
+                        this.setState({follows: []})
+                    }
+
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        })
+
+    }
+
 
     render() {
         return (
@@ -84,10 +122,10 @@ class UserProfile extends React.Component {
                                 <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }} user={this.props.user}>
                                 </EditProfileForm>
                                 <div id="followItem">
-                                    <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.userfollows.length}</div></div>
+                                    <div>Seguidos<div style={{ textAlign: "center" }}>{this.state.follows.length}</div></div>
                                 </div>
                                 <div id="followItem">
-                                    <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.userfollowers.length}</div></div>
+                                    <div>Seguidores<div style={{ textAlign: "center" }}>{this.state.followers.length}</div></div>
                                 </div>
                             </div>
                             <div style={{ textAlign: "center" }}><h2>{this.props.user.description}</h2></div>

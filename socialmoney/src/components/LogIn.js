@@ -21,7 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
-import { userLogged, userFollows, userFollowers } from '../redux/actions';
+import { userLogged} from '../redux/actions';
 import { connect } from 'react-redux';
 
 function Copyright() {
@@ -118,28 +118,8 @@ function LogIn(props) {
                     // This is kind of a dirty fix and should be a generic method.
                     account.picture = base64String
 
-                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
-                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
-
-                    console.log(followers)
-                    console.log(followers.length)
-
                     props.dispatch(userLogged(account))
 
-                    if (followers.length != 0){
-                        props.dispatch(userFollowers(followers.split(",")))
-                    }
-                    else {
-                        props.dispatch(userFollowers([]))
-                    }
-
-                    if (follows.length != 0){
-                        props.dispatch(userFollows(follows.split(",")))
-                    }
-                    else {
-                        props.dispatch(userFollows([]))
-                    }
-                    
                     console.log(account)
                 } else {
                     alert("Usuario incorrecto")

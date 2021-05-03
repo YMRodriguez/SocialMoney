@@ -7,7 +7,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import { useLocation } from "react-router-dom";
 import $ from 'jquery';
 import { useHistory } from "react-router-dom";
-import { userVisited, visitFollows, visitFollowers } from "../redux/actions";
+import { userVisited} from "../redux/actions";
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -93,26 +93,8 @@ function ButtonAppBar(props) {
                                                 let account = JSON.parse(msg.account)
                                                 props.dispatch(userVisited(account))
 
-                                                let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
-                                                let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
-
-                                                if (visitfollowers.length != 0){
-                                                    props.dispatch(visitFollowers(visitfollowers.split(",")))
-                                                }
-                                                else {
-                                                    props.dispatch(visitFollowers([]))
-                                                }
-                            
-                                                if (visitfollows.length != 0){
-                                                    props.dispatch(visitFollows(visitfollows.split(",")))
-                                                }
-                                                else {
-                                                    props.dispatch(visitFollows([]))
-                                                }
-
                                                 alert("¡Encontrado con éxito!")
                                                 console.log('Success')
-                                                console.log(visitfollowers)
                                             }
                                             else {
                                                 console.log("Error 404")
