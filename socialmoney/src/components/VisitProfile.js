@@ -11,21 +11,23 @@ class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [], buttonstate: false, follows: [], followers: [] }
+        this.state = { posts: [], buttonstate: false, follows: [], followers: [], superbuttonstate: "" }
     }
 
     async componentDidMount() {
         this.fetchPosts();
-        this.fetchFollows();
+        this.showFollows();
+        this.showSuperFollows();
     }
 
     async componentDidUpdate(prevProps){
         if (prevProps.visituser.username !== this.props.visituser.username){
-            this.fetchFollows();
+            this.showFollows();
+            this.showSuperFollows();
         }
     }
 
-    fetchFollows() {
+    showFollows() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/showfollows",
             type: 'POST',
@@ -60,7 +62,6 @@ class VisitProfile extends React.Component {
                 }
             }.bind(this)
         })
-
     }
  
     fetchfollow() {
@@ -72,7 +73,7 @@ class VisitProfile extends React.Component {
             success: function (msg) {
                 if (msg.code == 200) {
                     console.log("Seguido/Dejado de seguir")
-                    this.fetchFollows();
+                    this.showFollows();
                 }
                 else {
                     console.log("Error 404")
@@ -104,15 +105,35 @@ class VisitProfile extends React.Component {
         });
     }
 
+    showSuperFollows() {
+            $.ajax({
+                url: "http://localhost:8080/SMON-SERVICE/showsuperfollows",
+                type: 'POST',
+                data: JSON.stringify({ username: this.props.visituser.username, myusername: this.props.user.username }),
+                async: false,
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        this.setState({superbuttonstate: msg.button})
+    
+                    }else {
+                        console.log("Error 404")
+                    }
+                }.bind(this)
+            })
+    }
+    
+    
+    
     fetchSuperfollow() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/superfollow",
             type: 'POST',
-            data: JSON.stringify({username: this.props.user.username, followed: this.props.visituser.username }),
+            data: JSON.stringify({myusername: this.props.user.username, username: this.props.visituser.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
                     console.log(msg)
+                    this.showSuperFollows()
                 }
                 else {
                     console.log("Error 404")
@@ -172,7 +193,7 @@ class VisitProfile extends React.Component {
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                             <Button color="primary" id="buttonSuperFollow" onClick={() => {this.fetchSuperfollow()}} style={{ color: "white" }} >
-                                SuperFollow
+                                {this.state.superbuttonstate}
                             </Button>
                         </div>
                     </div>
