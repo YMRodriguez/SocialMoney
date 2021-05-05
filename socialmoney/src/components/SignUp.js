@@ -127,6 +127,10 @@ export default function SignUp() {
         params.password = crypted;
         $.ajax({
             url: url,
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
             type: 'POST',
             data: JSON.stringify(params),
             async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
