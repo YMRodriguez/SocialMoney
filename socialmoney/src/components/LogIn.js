@@ -23,6 +23,8 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
 import { userLogged, userFollows, userFollowers } from '../redux/actions';
 import { connect } from 'react-redux';
+import pidCrypt from 'pidcrypt'
+
 
 function Copyright() {
     return (
@@ -103,10 +105,29 @@ function LogIn(props) {
     }
 
     async function makePostRequest(params) {
-
+        var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
+        var pidCrypt = require("pidcrypt")
+        require("pidcrypt/rsa")
+        
+        var rsa = new pidCrypt.RSA();
+        var pidCryptUtil = require("pidcrypt/pidcrypt_util")
+        var pem = pidCryptUtil.decodeBase64(pub_key);
+        require("pidcrypt/asn1")
+        var asn = pidCrypt.ASN1.decode(pidCryptUtil.toByteArray(pem));
+        var tree = asn.toHexTree();
+        rsa.setPublicKeyFromASN(tree);
+        var crypted = rsa.encrypt(params.password);
+        params.password = crypted;
+        console.log(params.password)
         var url = "http://localhost:8080/SMON-SERVICE/login"
+
+
         $.ajax({
             url: url,
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             type: 'POST',
             data: JSON.stringify(params),
             async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
@@ -180,7 +201,6 @@ function LogIn(props) {
                         name="password"
                         fullWidth
                         type={state.showPassword ? 'text' : 'password'}
-                        value={state.password}
                         error={checkError("password", state.password)}
                         label="Contraseña"
                         autoComplete="current-password"

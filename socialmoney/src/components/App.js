@@ -21,7 +21,10 @@ function App(props) {
     var url = "http://localhost:8080/SMON-SERVICE/logout"
     $.ajax({
         url: url,
-        credentials: "include",
+        xhrFields: {
+          withCredentials: true
+        },
+        crossDomain: true,
         type: 'GET',
         contentType: false,
         processData: false,
