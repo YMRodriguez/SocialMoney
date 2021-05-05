@@ -23,51 +23,52 @@ class VisitProfile extends React.Component {
         if (this.props.userfollows.length > 0) {
             console.log(this.state.buttonstate)
             let follow = this.props.userfollows.filter(u => u.username == this.props.visituser.username)
-            if (follow.length>0){
+            if (follow.length > 0) {
                 console.log(follow)
-                this.setState({buttonstate: true})
+                this.setState({ buttonstate: true })
             }
             else {
                 console.log(follow)
-                this.setState({buttonstate: false})}
+                this.setState({ buttonstate: false })
+            }
         }
     }
- 
+
     fetchfollow() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/follow",
             type: 'POST',
-            data: JSON.stringify({username: this.props.user.username, followed: this.props.visituser.username }),
+            data: JSON.stringify({ username: this.props.user.username, followed: this.props.visituser.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
-                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1,JSON.parse(msg.userFollows).userFollows.length-1)
-                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
-                    let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1,JSON.parse(msg.visitFollows).userFollows.length-1)
-                    let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
+                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollows.length - 1)
+                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
+                    let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1, JSON.parse(msg.visitFollows).userFollows.length - 1)
+                    let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1, JSON.parse(msg.visitFollows).userFollowers.length - 1)
 
-                    if (followers.length != 0){
+                    if (followers.length != 0) {
                         this.props.dispatch(userFollowers(followers.split(",")))
                     }
                     else {
                         this.props.dispatch(userFollowers([]))
                     }
 
-                    if (follows.length != 0){
+                    if (follows.length != 0) {
                         this.props.dispatch(userFollows(follows.split(",")))
                     }
                     else {
                         this.props.dispatch(userFollows([]))
                     }
 
-                    if (visitfollowers.length != 0){
+                    if (visitfollowers.length != 0) {
                         this.props.dispatch(visitFollowers(visitfollowers.split(",")))
                     }
                     else {
                         this.props.dispatch(visitFollowers([]))
                     }
 
-                    if (visitfollows.length != 0){
+                    if (visitfollows.length != 0) {
                         this.props.dispatch(visitFollows(visitfollows.split(",")))
                     }
                     else {
@@ -153,11 +154,24 @@ class VisitProfile extends React.Component {
                             <div>Publicaciones<div>{this.state.posts.length}</div></div>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                            <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>
-                                <Button color="primary" id="buttonSuperFollow" onClick={() => {this.fetchfollow()}} style={{ color: "white" }}>
-                                    {this.state.buttonstate? "Dejar de seguir" : "Seguir"}
-                                </Button>
+                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                                <div>Rentabilidad
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.profit}</div>
+                                </div>
                             </div>
+                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                                <div>Timeframe
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.timeframe}</div>
+                                </div>
+                            </div>
+                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                                <div>Tipo de cuenta
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.accountType}</div>
+                                </div>
+                            </div>
+                            <Button color="primary" id="buttonSuperFollow" onClick={() => { this.fetchfollow() }} style={{ color: "white" }}>
+                                {this.state.buttonstate ? "Dejar de seguir" : "Seguir"}
+                            </Button>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                             <Button color="primary" id="buttonSuperFollow" style={{ color: "white" }} >

@@ -7,6 +7,7 @@ import EditProfileForm from "./EditProfileForm.js";
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
+import { userLogged, userFollows, userFollowers } from '../redux/actions';
 
 
 class UserProfile extends React.Component {
@@ -15,18 +16,24 @@ class UserProfile extends React.Component {
         super(props);
         this.state = {
             posts: [],
+            account: {}
         }
     }
 
     async componentDidMount() {
         this.fetchPosts();
+        console.log(this.state)
+        this.fetchAccount();
     }
 
     fetchPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/publications",
-            type: 'POST',
-            data: JSON.stringify({ username: this.props.user.username }),
+            type: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
@@ -45,11 +52,57 @@ class UserProfile extends React.Component {
         });
     }
 
+    fetchAccount() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/account",
+            type: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    let account = JSON.parse(msg.account)
+                    console.log('Success')
+                    console.log(msg.account);
+                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
+                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
+
+                    this.props.dispatch(userLogged(account))
+                    if (followers.length != 0) {
+                        this.props.dispatch(userFollowers(followers.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(userFollowers([]))
+                    }
+                    if (follows.length != 0) {
+                        this.props.dispatch(userFollows(follows.split(",")))
+                    }
+                    else {
+                        this.props.dispatch(userFollows([]))
+                    }
+                    this.setState({ account: account })
+                }
+                else if (msg.code == 204) {
+                    console.log('Success')
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        });
+    }
+
     fetchPublications(p) {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/deletePost",
             type: 'POST',
             data: JSON.stringify({ id: p.id }),
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
@@ -76,12 +129,12 @@ class UserProfile extends React.Component {
                             </Button>
                         </Link>
                         <div id="profileimgname">
-                            <img src={this.props.user.picture ? ("data:image/png;base64," + this.props.user.picture) : user2} alt="Profile picture" id="profilepic" />
-                            <div style={{ textAlign: "center" }}><h2>@{this.props.user.username}</h2></div>
+                            <img src={this.props.user.picture ? ("data:image/png;base64," + this.state.account.picture) : user2} alt="Profile picture" id="profilepic" />
+                            <div style={{ textAlign: "center" }}><h2>@{this.state.account.username}</h2></div>
                         </div>
                         <div id="userHeader">
                             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
-                                <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }} user={this.props.user}>
+                                <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }} user={this.state.account} onClose={() => this.fetchAccount()}>
                                 </EditProfileForm>
                                 <div id="followItem">
                                     <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.userfollows.length}</div></div>
@@ -90,7 +143,7 @@ class UserProfile extends React.Component {
                                     <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.userfollowers.length}</div></div>
                                 </div>
                             </div>
-                            <div style={{ textAlign: "center" }}><h2>{this.props.user.description}</h2></div>
+                            <div style={{ textAlign: "center" }}><h2>{this.state.account.description}</h2></div>
                         </div>
                     </div>
                     <div id="posts">
@@ -108,14 +161,27 @@ class UserProfile extends React.Component {
                 </div>
                 <div style={{ width: "20%" }}>
                     <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                        <div>Publicaciones<div>{this.state.posts.length}</div></div>
-                    </div>
-                    <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                        <div>Rentabilidad<div style={{ textAlign: "center", width: "100%" }}>N%</div>
+                        <div>Publicaciones
+                            <div>{this.state.posts.length}</div>
                         </div>
                     </div>
+                    {this.state.account.showprofits ? (<div><div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                        <div>Rentabilidad
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.profit}</div>
+                        </div>
+                    </div>
+                        <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                            <div>Timeframe
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.timeframe}</div>
+                            </div>
+                        </div>
+                        <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                            <div>Tipo de cuenta
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.accountType}</div>
+                            </div>
+                        </div></div>) : (<div></div>)}
                     <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                        <ConnectPlatformForm color="primary" id="buttonSuperFollow" style={{ color: "white" }}>
+                        <ConnectPlatformForm color="primary" id="buttonSuperFollow" style={{ color: "white" }} onClose={() => this.fetchAccount()}>
                         </ConnectPlatformForm>
                         <Button color="primary" id="buttonSuperFollow" style={{ color: "white", marginTop: "8%" }}>
                             Gestionar SuperFollows
