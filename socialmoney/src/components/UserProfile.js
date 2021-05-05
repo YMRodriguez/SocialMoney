@@ -8,6 +8,10 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
 import { userLogged, userFollows, userFollowers } from '../redux/actions';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 
 class UserProfile extends React.Component {
@@ -16,14 +20,17 @@ class UserProfile extends React.Component {
         super(props);
         this.state = {
             posts: [],
-            account: {}
+            follows: [],
+            followers: [],
+            pendings: [],
+            superfollowers: [],
+            open: false
         }
     }
 
     async componentDidMount() {
         this.fetchPosts();
-        console.log(this.state)
-        this.fetchAccount();
+        this.fetchFollows()
     }
 
     fetchPosts() {
@@ -97,6 +104,10 @@ class UserProfile extends React.Component {
     fetchPublications(p) {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/deletePost",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
             type: 'POST',
             data: JSON.stringify({ id: p.id }),
             xhrFields: {
@@ -117,6 +128,133 @@ class UserProfile extends React.Component {
         this.fetchPosts();
     }
 
+    fetchFollows() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/showfollows",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({ username: this.props.user.username, myusername:"usernamenoexists"}),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log('Success')
+                    let follows = JSON.parse(msg.userfollows).userFollows.substring(1,JSON.parse(msg.userfollows).userFollows.length-1)
+                    let followers = JSON.parse(msg.userfollows).userFollowers.substring(1,JSON.parse(msg.userfollows).userFollowers.length-1)
+
+                    if (followers.length != 0){
+                        this.setState({followers: followers.split(",")})
+                    }
+                    else {
+                        this.setState({followers: []})
+                    }
+
+                    if (follows.length != 0){
+                        this.setState({follows: follows.split(",")})
+                    }
+                    else {
+                        this.setState({follows: []})
+                    }
+
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        })
+
+    }
+
+    onClickSFButton () {
+        this.fetchManageSuperFollows();
+        this.handleClickOpen();
+    }
+
+    fetchManageSuperFollows() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/managesuperfollow",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({ myusername: this.props.user.username, username:"usernamenoexists", button:"botonnoexists"}),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log('Success')
+                    let pend = JSON.parse(msg.moderator).userSuperFollowsPending.substring(1,JSON.parse(msg.moderator).userSuperFollowsPending.length-1)
+                    let followers = JSON.parse(msg.moderator).userSuperFollowers.substring(1,JSON.parse(msg.moderator).userSuperFollowers.length-1)
+
+                    if (followers.length != 0){
+                        this.setState({superfollowers: followers.split(",")})
+                    }
+                    else {
+                        this.setState({followers: []})
+                    }
+
+                    if (pend.length != 0){
+                        this.setState({pendings: pend.split(",")})
+                    }
+                    else {
+                        this.setState({pendings: []})
+                    }
+
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        })
+    }
+
+    handleClickOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
+    handleSolicitation (button, username) {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/managesuperfollow",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({ myusername: this.props.user.username, username: username, button: button}),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log('Success')
+                    let pend = JSON.parse(msg.moderator).userSuperFollowsPending.substring(1,JSON.parse(msg.moderator).userSuperFollowsPending.length-1)
+                    let followers = JSON.parse(msg.moderator).userSuperFollowers.substring(1,JSON.parse(msg.moderator).userSuperFollowers.length-1)
+
+                    if (followers.length != 0){
+                        this.setState({superfollowers: followers.split(",")})
+                    }
+                    else {
+                        this.setState({superfollowers: []})
+                    }
+
+                    if (pend.length != 0){
+                        this.setState({pendings: pend.split(",")})
+                    }
+                    else {
+                        this.setState({pendings: []})
+                    }
+
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        })
+    }
 
     render() {
         return (
@@ -137,10 +275,10 @@ class UserProfile extends React.Component {
                                 <EditProfileForm color="primary" id="buttonFollow" style={{ color: "white" }} user={this.state.account} onClose={() => this.fetchAccount()}>
                                 </EditProfileForm>
                                 <div id="followItem">
-                                    <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.userfollows.length}</div></div>
+                                    <div>Seguidos<div style={{ textAlign: "center" }}>{this.state.follows.length}</div></div>
                                 </div>
                                 <div id="followItem">
-                                    <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.userfollowers.length}</div></div>
+                                    <div>Seguidores<div style={{ textAlign: "center" }}>{this.state.followers.length}</div></div>
                                 </div>
                             </div>
                             <div style={{ textAlign: "center" }}><h2>{this.state.account.description}</h2></div>
@@ -183,9 +321,44 @@ class UserProfile extends React.Component {
                     <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                         <ConnectPlatformForm color="primary" id="buttonSuperFollow" style={{ color: "white" }} onClose={() => this.fetchAccount()}>
                         </ConnectPlatformForm>
-                        <Button color="primary" id="buttonSuperFollow" style={{ color: "white", marginTop: "8%" }}>
+                        <Button color="primary" id="buttonSuperFollow" onClick={() => {this.onClickSFButton()}} style={{ color: "white", marginTop: "8%" }}>
                             Gestionar SuperFollows
                     </Button>
+                    <Dialog paperWidthLg open={this.state.open} fullWidth={true} aria-labelledby="form-dialog-title" style={{ color: "white", width: "80%" }}>
+                        <DialogContent>
+                            <DialogContentText>
+                                <h2> Usuarios con solicitud pendiente </h2>
+                                <ul>
+                                {this.state.pendings.map((p, i) => {
+                                    return(
+                                        <li>
+                                        <p>{p}</p>
+                                        <button onClick={()=>this.handleSolicitation("Accept", p)}>Aceptar</button>
+                                        <button onClick={()=>this.handleSolicitation("Reject", p)}>Rechazar</button>
+                                        </li>
+                                    )
+                                })}
+                                </ul>
+                                <h2> Superfollows </h2>
+                                <ul>
+                                {this.state.superfollowers.map((sf, i) => {
+                                    return(
+                                        <li>
+                                        <p>{sf}</p>
+                                        <button onClick={()=>this.handleSolicitation("Delete",sf)}>Eliminar</button>
+                                        </li>
+                                    )
+                                })}
+                                </ul>
+                                
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Close 
+                                </Button>
+                        </DialogActions>
+                    </Dialog>
                     </div>
                 </div>
             </div>
