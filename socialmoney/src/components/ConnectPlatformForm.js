@@ -10,9 +10,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import $ from 'jquery';
 
 
-export default function ConnectPlatformForm() {
+export default function ConnectPlatformForm(props) {
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
         platform: '',
@@ -33,7 +34,6 @@ export default function ConnectPlatformForm() {
     };
 
     const handleCloseCancelling = () => {
-        console.log(state.file)
         setOpen(false);
     };
 
@@ -51,12 +51,35 @@ export default function ConnectPlatformForm() {
                 method: "POST",
                 body: formData
             }).then(r =>
-                console.log(r.json())
-                // Need to send the response to the backend
+                r.json()
+            ).then(d => {
+                $.ajax({
+                    url: "http://localhost:8080/SMON-SERVICE/validateProfits",
+                    type: 'POST',
+                    data: JSON.stringify(d),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    async: false,
+                    success: function (msg) {
+                        if (msg.code == 200) {
+                            console.log('Success')
+                        }
+                        else if (msg.code == 204) {
+                            console.log('Success')
+                        }
+                        else {
+                            console.log("Error 404")
+                        }
+                    }.bind(this)
+                });
+            }
             )
             res()
             setOpen(false);
         }
+        props.onClose();
     };
 
     return (

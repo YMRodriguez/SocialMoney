@@ -33,7 +33,7 @@ function EditProfileForm(props) {
         showprofits: props.user.showprofits,
         showPassword: '', // This is only relevant to this component.
         passwordDelete: '',
-        options : 0
+        options: 0
     });
 
     // Password handlers.
@@ -49,10 +49,6 @@ function EditProfileForm(props) {
         setState({ ...state, [event.target.name]: event.target.value });
     };
 
-  /*   const handleChange2 = (event) => {
-        setState({ ...state, [event.target.name]: event.target.value });
-    }; */
-
     const handleChangePDF = (event) => {
         setState({ ...state, [event.target.name]: event.target.files[0] });
     };
@@ -65,18 +61,17 @@ function EditProfileForm(props) {
         setOpen2(true);
     };
 
-    
+
 
 
     const handleClickDelete = () => {
-        console.log(state.passwordDelete)
         var mensaje = window.confirm("¿Está seguro de eliminar su cuenta y sus posts?");
 
-        if (mensaje){
+        if (mensaje) {
             makeDeleteAccount(state)
         }
-        else{
-        } 
+        else {
+        }
     };
 
     const handleCloseCancelling = () => {
@@ -92,7 +87,6 @@ function EditProfileForm(props) {
             alert("Tiene que rellenar todos los campos.")
         } else {
             setTimeout(() => {
-                console.log(state)
                 makePostRequest(state)
             }, 100);
         }
@@ -109,27 +103,31 @@ function EditProfileForm(props) {
         switch (part) {
             // We may want to make this more secure in the future.
             case "password":
-                data.length < 8 ? error = true : error = false;
+                data.length > 1 && !data.lenght > 8 ? error = true : error = false;
                 return error;
         }
     }
 
     async function makePostRequest(params) {
         console.log(params.password.length)
+        if (params.description === undefined) {
+            params.description = ""
+        }
+        console.log(params.description)
         if (params.password.length > 0) {
-        var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
-        var pidCrypt = require("pidcrypt")
-        require("pidcrypt/rsa")
-        
-        var rsa = new pidCrypt.RSA();
-        var pidCryptUtil = require("pidcrypt/pidcrypt_util")
-        var pem = pidCryptUtil.decodeBase64(pub_key);
-        require("pidcrypt/asn1")
-        var asn = pidCrypt.ASN1.decode(pidCryptUtil.toByteArray(pem));
-        var tree = asn.toHexTree();
-        rsa.setPublicKeyFromASN(tree);
-        var crypted = rsa.encrypt(params.password);
-        params.password = crypted;
+            var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
+            var pidCrypt = require("pidcrypt")
+            require("pidcrypt/rsa")
+
+            var rsa = new pidCrypt.RSA();
+            var pidCryptUtil = require("pidcrypt/pidcrypt_util")
+            var pem = pidCryptUtil.decodeBase64(pub_key);
+            require("pidcrypt/asn1")
+            var asn = pidCrypt.ASN1.decode(pidCryptUtil.toByteArray(pem));
+            var tree = asn.toHexTree();
+            rsa.setPublicKeyFromASN(tree);
+            var crypted = rsa.encrypt(params.password);
+            params.password = crypted;
         }
         var url = "http://localhost:8080/SMON-SERVICE/editprofile"
         const formData = new FormData();
@@ -137,11 +135,14 @@ function EditProfileForm(props) {
         formData.append("data",
             JSON.stringify(
                 { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username }))
-
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             contentType: false,
             processData: false,
             async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
@@ -158,6 +159,7 @@ function EditProfileForm(props) {
                 }
             }
         });
+        props.onClose();
     }
 
 
@@ -165,7 +167,6 @@ function EditProfileForm(props) {
         var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
         var pidCrypt = require("pidcrypt")
         require("pidcrypt/rsa")
-        
         var rsa = new pidCrypt.RSA();
         var pidCryptUtil = require("pidcrypt/pidcrypt_util")
         var pem = pidCryptUtil.decodeBase64(pub_key);
@@ -183,12 +184,11 @@ function EditProfileForm(props) {
             data: JSON.stringify(params),
             contentType: false,
             processData: false,
-            async: false, 
+            async: false,
             success: function (msg) {
                 if (msg.code == 200) {
                     alert("Cuenta y posts borrados con exito\n¡Nos vemos pronto!")
                     history.push("/")
-
                 } else {
                     alert("No se ha podido borrar la cuenta. Intentelo más tarde")
                 }
@@ -201,12 +201,9 @@ function EditProfileForm(props) {
             <Button onClick={handleClickOpen} id="buttonSuperFollow" style={{ color: "white", width: "35%" }}>
                 Editar perfil
             </Button>
-
             <Button onClick={handleClickOpen2} id="buttonDelete" style={{ backgroundColor: 'red', color: "white", width: "35%" }}>
                 Eliminar perfil
             </Button>
-
-
             <Dialog paperWidthLg open={open} fullWidth={true} aria-labelledby="form-dialog-title" style={{ color: "white", width: "80%" }}>
                 <DialogContent>
                     <DialogContentText>
@@ -216,7 +213,7 @@ function EditProfileForm(props) {
                     <DialogContentText>
                         <h2>Descripcion de usuario</h2>
                     </DialogContentText>
-                    <Input type="text" fullWidth onChange={handleChange} name="description" multiline={true} value={state.description}> Suba aquí su nueva foto de perfil</Input>
+                    <Input type="text" fullWidth onChange={handleChange} name="description" multiline={true} value={state.description ? state.description : ""}></Input>
                     <DialogContentText>
                         <h2>Nueva contraseña</h2>
                     </DialogContentText>
@@ -246,7 +243,6 @@ function EditProfileForm(props) {
                     <FormHelperText id="standard-weight-helper-text">Su contraseña debe tener al menos 8 caracteres</FormHelperText>
                     <DialogContentText>
                         <h2>Opciones de usuario</h2>
-
                     </DialogContentText>
                     <FormControlLabel
                         control={<Checkbox checked={state.showprofits} onChange={handleChangeProfits} name="showprofits" />}
@@ -290,19 +286,16 @@ function EditProfileForm(props) {
                         }
                         labelWidth={70}
                     />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseCancelling2} color="primary">
-                            Cancel
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseCancelling2} color="primary">
+                        Cancel
                         </Button>
-                        <Button onClick={handleClickDelete} color="primary">
-                            Eliminar cuenta
+                    <Button onClick={handleClickDelete} color="primary">
+                        Eliminar cuenta
                         </Button>
                 </DialogActions>
             </Dialog>
-
-
-
         </div>
     );
 }

@@ -108,7 +108,7 @@ function LogIn(props) {
         var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
         var pidCrypt = require("pidcrypt")
         require("pidcrypt/rsa")
-        
+
         var rsa = new pidCrypt.RSA();
         var pidCryptUtil = require("pidcrypt/pidcrypt_util")
         var pem = pidCryptUtil.decodeBase64(pub_key);
@@ -138,29 +138,21 @@ function LogIn(props) {
                     let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
                     // This is kind of a dirty fix and should be a generic method.
                     account.picture = base64String
-
-                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
-                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1,JSON.parse(msg.userFollows).userFollowers.length-1)
-
-                    console.log(followers)
-                    console.log(followers.length)
-
+                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
+                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
                     props.dispatch(userLogged(account))
-
-                    if (followers.length != 0){
+                    if (followers.length != 0) {
                         props.dispatch(userFollowers(followers.split(",")))
                     }
                     else {
                         props.dispatch(userFollowers([]))
                     }
-
-                    if (follows.length != 0){
+                    if (follows.length != 0) {
                         props.dispatch(userFollows(follows.split(",")))
                     }
                     else {
                         props.dispatch(userFollows([]))
                     }
-                    
                     console.log(account)
                 } else {
                     alert("Usuario incorrecto")
