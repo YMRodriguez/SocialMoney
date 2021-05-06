@@ -61,12 +61,12 @@ export default class TagsTabBar extends React.Component{
      fetchFollowPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/feed",
-        /*
+        
             xhrFields: {
           withCredentials: true
             },
             crossDomain: true,
-            */
+            
             type: 'POST',
             data: JSON.stringify({ username: this.props.user.username }),
             async: false,
