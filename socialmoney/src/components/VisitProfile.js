@@ -11,7 +11,7 @@ class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [], buttonstate: false, buttonSFstate: "", follows: [], followers: [] }
+        this.state = { posts: [], buttonstate: false, buttonSFstate: "", follows: [], followers: [], account:[] }
     }
 
     async componentDidMount() {
@@ -46,6 +46,7 @@ class VisitProfile extends React.Component {
                     let button = JSON.parse(msg.button)
 
                     this.setState({buttonstate: button})
+                    console.log(msg.button)
 
                     if (followers.length != 0){
                         this.setState({followers: followers.split(",")})

@@ -20,6 +20,7 @@ class UserProfile extends React.Component {
         super(props);
         this.state = {
             posts: [],
+            account: {},
             follows: [],
             followers: [],
             pendings: [],
@@ -30,6 +31,8 @@ class UserProfile extends React.Component {
 
     async componentDidMount() {
         this.fetchPosts();
+        console.log(this.state)
+        this.fetchAccount();
         this.fetchFollows()
     }
 
