@@ -86,7 +86,7 @@ function ButtonAppBar(props) {
                                         url: "http://localhost:8080/SMON-SERVICE/search",
                                         xhrFields: {
                                             withCredentials: true
-                                          },
+                                        },
                                         crossDomain: true,
                                         type: 'POST',
                                         data: JSON.stringify({ username: e.target.value }),

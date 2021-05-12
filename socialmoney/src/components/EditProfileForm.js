@@ -186,7 +186,7 @@ function EditProfileForm(props) {
             url: url,
             xhrFields: {
                 withCredentials: true
-              },
+            },
             crossDomain: true,
             type: 'POST',
             data: JSON.stringify(params),

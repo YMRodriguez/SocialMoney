@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Post(props) {
+export default function PostFeed(props) {
     const classes = useStyles();
 if(props.allowbutton){
     return (
@@ -49,10 +49,6 @@ if(props.allowbutton){
 
                     
                 </Link>
-
-                <button  onClick= {() => props.onPressButton()} size="small" color="primary" id="linktoarticle">
-                    REMOVE
-                </button>
         
 {/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
