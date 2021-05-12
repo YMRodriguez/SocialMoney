@@ -23,7 +23,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import $ from 'jquery'
 import { userLogged, userFollows, userFollowers } from '../redux/actions';
 import { connect } from 'react-redux';
-import pidCrypt from 'pidcrypt'
+import pidCrypt from 'pidcrypt';
 
 
 function Copyright() {

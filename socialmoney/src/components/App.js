@@ -2,7 +2,7 @@ import '../App.css';
 import React from "react";
 import "@fontsource/roboto";
 import TagsTabBar from './TagsTabBar';
-import user from '../user.png';
+import user from '../user.png'
 import dow from '../dow.png';
 import nasdaq from '../nasdaq.png';
 import sp500 from '../sp500.png';
@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import user2 from '../user2.png';
 import { userUnlogged } from '../redux/actions';
 import $ from 'jquery';
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"; 
 
 function App(props) {
   const history = useHistory();

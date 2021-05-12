@@ -5,85 +5,85 @@ import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import user2 from '../user2.png';
-import { userFollowers, userFollows, visitFollowers, visitFollows } from '../redux/actions';
 import { RepeatRounded } from "@material-ui/icons";
 
 class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [], buttonstate: false, account: {}}
+        this.state = { posts: [], buttonstate: false, buttonSFstate: "", follows: [], followers: [], account:[] }
     }
 
     async componentDidMount() {
         this.fetchPosts();
+        this.fetchFollows();
+        this.fetchSuperfollows();
     }
 
-    follow() {
-        if (this.props.userfollows.length > 0) {
-            console.log(this.state.buttonstate)
-            let follow = this.props.userfollows.filter(u => u.username == this.props.visituser.username)
-            if (follow.length > 0) {
-                console.log(follow)
-                this.setState({ buttonstate: true })
-            }
-            else {
-                console.log(follow)
-                this.setState({ buttonstate: false })
-            }
+
+    async componentDidUpdate(prevProps){
+        if (prevProps.visituser.username !== this.props.visituser.username){
+            this.fetchFollows();
+            this.fetchSuperfollows();
         }
     }
 
-    fetchfollow() {
+    fetchFollows() {
         $.ajax({
-            url: "http://localhost:8080/SMON-SERVICE/follow",
+            url: "http://localhost:8080/SMON-SERVICE/showfollows",
             xhrFields: {
                 withCredentials: true
             },
             crossDomain: true,
             type: 'POST',
-            data: JSON.stringify({ username: this.props.user.username, followed: this.props.visituser.username }),
+            data: JSON.stringify({ username: this.props.visituser.username, myusername: this.props.user.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
-                    let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollows.length - 1)
-                    let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
-                    let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1, JSON.parse(msg.visitFollows).userFollows.length - 1)
-                    let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1, JSON.parse(msg.visitFollows).userFollowers.length - 1)
+                    console.log('Success')
+                    let follows = JSON.parse(msg.userfollows).userFollows.substring(1,JSON.parse(msg.userfollows).userFollows.length-1)
+                    let followers = JSON.parse(msg.userfollows).userFollowers.substring(1,JSON.parse(msg.userfollows).userFollowers.length-1)
+                    let button = JSON.parse(msg.button)
 
-                    if (followers.length != 0) {
-                        this.props.dispatch(userFollowers(followers.split(",")))
+                    this.setState({buttonstate: button})
+                    console.log(msg.button)
+
+                    if (followers.length != 0){
+                        this.setState({followers: followers.split(",")})
                     }
                     else {
-                        this.props.dispatch(userFollowers([]))
+                        this.setState({followers: []})
                     }
-
-                    if (follows.length != 0) {
-                        this.props.dispatch(userFollows(follows.split(",")))
-                    }
-                    else {
-                        this.props.dispatch(userFollows([]))
-                    }
-
-                    if (visitfollowers.length != 0) {
-                        this.props.dispatch(visitFollowers(visitfollowers.split(",")))
+                    if (follows.length != 0){
+                        this.setState({follows: follows.split(",")})
                     }
                     else {
-                        this.props.dispatch(visitFollowers([]))
-                    }
+                        this.setState({follows: []})
+                    } 
 
-                    if (visitfollows.length != 0) {
-                        this.props.dispatch(visitFollows(visitfollows.split(",")))
-                    }
-                    else {
-                        this.props.dispatch(visitFollows([]))
-                    }
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        })
 
-                    this.follow()
-
-                    console.log(follows)
-                    console.log(visitfollowers)
-
+    }
+ 
+    fetchfollow() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/follow",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({username: this.props.user.username, followed: this.props.visituser.username }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log("Seguido/Dejado de seguir")
+                    this.fetchFollows();
                 }
                 else {
                     console.log("Error 404")
@@ -118,6 +118,55 @@ class VisitProfile extends React.Component {
         });
     }
 
+    fetchSuperfollows() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/showsuperfollows",
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({ username: this.props.visituser.username, myusername: this.props.user.username }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log('Success')
+                    console.log(msg)
+                    console.log(msg.button)
+                    this.setState({buttonSFstate: msg.button})
+                    console.log(this.state.buttonSFstate)
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        });
+    }
+
+    fetchSuperfollow() {
+        $.ajax({
+            url: "http://localhost:8080/SMON-SERVICE/superfollow",
+            xhrFields: {
+                withCredentials: true
+              },
+              crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({myusername: this.props.user.username, username: this.props.visituser.username }),
+            async: false,
+            success: function (msg) {
+                if (msg.code == 200) {
+                    console.log(msg)
+                    this.fetchSuperfollows();
+                }
+                else {
+                    console.log("Error 404")
+                }
+            }.bind(this)
+        });
+    }
+
+
+
     render() {
         if (this.props.visituser.username) {
             return (
@@ -136,10 +185,10 @@ class VisitProfile extends React.Component {
                             <div id="userHeader">
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
                                     <div id="followItem">
-                                        <div>Seguidos<div style={{ textAlign: "center" }}>{this.props.visitfollows.length}</div></div>
+                                        <div>Seguidos<div style={{ textAlign: "center" }}>{this.state.follows.length}</div></div>
                                     </div>
                                     <div id="followItem">
-                                        <div>Seguidores<div style={{ textAlign: "center" }}>{this.props.visitfollowers.length}</div></div>
+                                        <div>Seguidores<div style={{ textAlign: "center" }}>{this.state.followers.length}</div></div>
                                     </div>
                                 </div>
                                 <div style={{ textAlign: "center" }}><h2>{this.props.visituser.description}</h2></div>
@@ -181,8 +230,8 @@ class VisitProfile extends React.Component {
                             </Button>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                            <Button color="primary" id="buttonSuperFollow" style={{ color: "white" }} >
-                                SuperFollow
+                            <Button color="primary" id="buttonSuperFollow" onClick={() => {this.fetchSuperfollow()}} style={{ color: "white" }} >
+                                {this.state.buttonSFstate}
                             </Button>
                         </div>
                     </div>

@@ -137,6 +137,10 @@ function EditProfileForm(props) {
                 { "description": params.description, "showprofits": params.showprofits, "password": params.password, "username": params.username }))
         $.ajax({
             url: url,
+            xhrFields: {
+                withCredentials: true
+              },
+            crossDomain: true,
             type: 'POST',
             data: formData,
             xhrFields: {
@@ -180,12 +184,10 @@ function EditProfileForm(props) {
         var url = "http://localhost:8080/SMON-SERVICE/deleteAccount"
         $.ajax({
             url: url,
-            /*
             xhrFields: {
-          withCredentials: true
+                withCredentials: true
             },
             crossDomain: true,
-            */
             type: 'POST',
             data: JSON.stringify(params),
             contentType: false,

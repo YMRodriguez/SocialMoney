@@ -31,12 +31,10 @@ export default function FormDialog(props) {
     if ((state.afun || state.atec || state.opinion) && ((state.content != "") && (state.title != "")) && (state.author)) {
       $.ajax({
         url: url,
-        /*
-            xhrFields: {
+        xhrFields: {
           withCredentials: true
-            },
-            crossDomain: true,
-        */
+        },
+        crossDomain: true,
         type: 'POST',
         data: JSON.stringify(params),
         async: false,
