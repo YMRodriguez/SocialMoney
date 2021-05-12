@@ -12,7 +12,7 @@ class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [], buttonstate: false }
+        this.state = { posts: [], buttonstate: false, account: {}}
     }
 
     async componentDidMount() {
@@ -37,6 +37,10 @@ class VisitProfile extends React.Component {
     fetchfollow() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/follow",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             type: 'POST',
             data: JSON.stringify({ username: this.props.user.username, followed: this.props.visituser.username }),
             async: false,
@@ -91,8 +95,11 @@ class VisitProfile extends React.Component {
     fetchPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/publications",
-            type: 'POST',
-            data: JSON.stringify({ username: this.props.visituser.username }),
+            type: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {

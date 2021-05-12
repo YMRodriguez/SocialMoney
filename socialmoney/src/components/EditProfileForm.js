@@ -180,6 +180,12 @@ function EditProfileForm(props) {
         var url = "http://localhost:8080/SMON-SERVICE/deleteAccount"
         $.ajax({
             url: url,
+            /*
+            xhrFields: {
+          withCredentials: true
+            },
+            crossDomain: true,
+            */
             type: 'POST',
             data: JSON.stringify(params),
             contentType: false,
