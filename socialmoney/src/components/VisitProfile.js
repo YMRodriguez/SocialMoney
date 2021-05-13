@@ -95,16 +95,18 @@ class VisitProfile extends React.Component {
     fetchPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/publications",
-            type: 'GET',
+
             xhrFields: {
                 withCredentials: true
             },
             crossDomain: true,
+            type: 'POST',
+            data: JSON.stringify({ username: this.props.visituser.username}),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
                     let receivedposts = JSON.parse(msg.postList)
-                    console.log('Success')
+                    console.log('ESTAN AQUI LOS POSTTT')
                     console.log(receivedposts);
                     this.setState({ posts: receivedposts })
                 }
@@ -117,7 +119,6 @@ class VisitProfile extends React.Component {
             }.bind(this)
         });
     }
-
     fetchSuperfollows() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/showsuperfollows",
