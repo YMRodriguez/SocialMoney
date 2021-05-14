@@ -13,7 +13,6 @@ import $ from 'jquery';
 
 function TabPanel(props){
     const { children, value, index, ...other } = props;
-    //console.log(props)
     return (
         <div
             sim
@@ -54,7 +53,6 @@ export default class TagsTabBar extends React.Component{
     }
 
     handleChange = (event, newValue) => {
-        //console.log(newValue);
         this.setState({value: newValue})
     };
 
@@ -76,10 +74,10 @@ export default class TagsTabBar extends React.Component{
                     this.setState({ posts: receivedposts })
                 }
                 else if (msg.code == 204) {
-                    console.log('Success')
+                    window.location = '/login';
                 }
                 else {
-                    console.log("Error 404")
+                    window.location = '/login';
                 }
             }.bind(this)
         });

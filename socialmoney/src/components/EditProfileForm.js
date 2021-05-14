@@ -109,11 +109,9 @@ function EditProfileForm(props) {
     }
 
     async function makePostRequest(params) {
-        console.log(params.password.length)
         if (params.description === undefined) {
             params.description = ""
         }
-        console.log(params.description)
         if (params.password.length > 0) {
             var pub_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2rr575OZJCQ8DFCcS4J+DZ/QJ4CUNAAxs8HtubRTKrLAqMRdS8yanNDyGBmYg8KGmNSDwV3/5jYDFVvJeStmHPW+45PShi0uOUhmBBFy2NOErkXzCV3l7Q5zTYhuYKQp55HU71OYahZRBVl8Ku13OpS47OX8zvZpQrjcg1Q4g/juZ6M4w+Ur0EovRtldKEzJwQnfAPeTU6NkYy/nAcayrkSPjAqkrCTC9EYAD3wl3x5LfxlJUL6gfI0Rcqr+NxDzXChZReucOPDrh4Jsnp5r45uLyGs4QH7Gvlx6cpUdILVFn634m2ZSxIc6Av77ZCao5/ii5GcyS0Zsl3RTC1dUQIDAQAB"
             var pidCrypt = require("pidcrypt")
@@ -139,7 +137,7 @@ function EditProfileForm(props) {
             url: url,
             xhrFields: {
                 withCredentials: true
-              },
+            },
             crossDomain: true,
             type: 'POST',
             data: formData,
@@ -156,7 +154,6 @@ function EditProfileForm(props) {
                     let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
                     // This is kind of a dirty fix and should be a generic method.
                     account.picture = base64String
-                    console.log(account)
                     props.dispatch(userLogged(account))
                 } else {
                     alert("No se ha podido editar el perfil")
@@ -180,7 +177,6 @@ function EditProfileForm(props) {
         rsa.setPublicKeyFromASN(tree);
         var crypted = rsa.encrypt(params.passwordDelete);
         params.passwordDelete = crypted;
-        console.log(JSON.stringify(params))
         var url = "http://localhost:8080/SMON-SERVICE/deleteAccount"
         $.ajax({
             url: url,

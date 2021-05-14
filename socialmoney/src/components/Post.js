@@ -41,14 +41,7 @@ if(props.allowbutton){
                 </CardContent>
             </CardActionArea>
             <CardActions id="cardactions">
-                <Link to="/postId">
-                    <Button size="small" color="primary" id="linktoarticle">
-                        Go to full article
-                    </Button>
-        
 
-                    
-                </Link>
 
                 <button  onClick= {() => props.onPressButton()} size="small" color="primary" id="linktoarticle">
                     REMOVE
@@ -84,11 +77,7 @@ else{
                 </CardContent>
             </CardActionArea>
             <CardActions id="cardactions">
-                <Link to="/postId">
-                    <Button size="small" color="primary" id="linktoarticle">
-                        Go to full article
-                    </Button>
-                    </Link>
+
 {/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
                 </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  

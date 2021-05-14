@@ -46,7 +46,6 @@ export default function ConnectPlatformForm(props) {
             formData.append("settings",
                 new Blob([JSON.stringify(
                     { "platform": state.platform, "timeframe": state.timeframe })], { type: 'application/json' }))
-            console.log(formData)
             var res = async () => await fetch("http://127.0.0.1:5000/checkInteractiveBrokers", {
                 method: "POST",
                 body: formData

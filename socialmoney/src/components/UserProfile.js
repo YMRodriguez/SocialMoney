@@ -31,7 +31,6 @@ class UserProfile extends React.Component {
 
     async componentDidMount() {
         this.fetchPosts();
-        console.log(this.state)
         this.fetchAccount();
         this.fetchFollows()
     }
@@ -49,14 +48,13 @@ class UserProfile extends React.Component {
                 if (msg.code == 200) {
                     let receivedposts = JSON.parse(msg.postList)
                     console.log('Success')
-                    console.log(receivedposts);
                     this.setState({ posts: receivedposts })
                 }
                 else if (msg.code == 204) {
-                    console.log('Success')
+                    window.location = '/login';
                 }
                 else {
-                    console.log("Error 404")
+                    window.location = '/login';
                 }
             }.bind(this)
         });
@@ -75,10 +73,10 @@ class UserProfile extends React.Component {
                 if (msg.code == 200) {
                     let account = JSON.parse(msg.account)
                     console.log('Success')
-                    console.log(msg.account);
                     let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
                     let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
-
+                    let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
+                    account.picture = base64String
                     this.props.dispatch(userLogged(account))
                     if (followers.length != 0) {
                         this.props.dispatch(userFollowers(followers.split(",")))

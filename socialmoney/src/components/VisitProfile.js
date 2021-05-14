@@ -82,7 +82,6 @@ class VisitProfile extends React.Component {
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
-                    console.log("Seguido/Dejado de seguir")
                     this.fetchFollows();
                 }
                 else {
@@ -107,7 +106,6 @@ class VisitProfile extends React.Component {
                 if (msg.code == 200) {
                     let receivedposts = JSON.parse(msg.postList)
                     console.log('ESTAN AQUI LOS POSTTT')
-                    console.log(receivedposts);
                     this.setState({ posts: receivedposts })
                 }
                 else if (msg.code == 204) {
@@ -132,10 +130,7 @@ class VisitProfile extends React.Component {
             success: function (msg) {
                 if (msg.code == 200) {
                     console.log('Success')
-                    console.log(msg)
-                    console.log(msg.button)
                     this.setState({buttonSFstate: msg.button})
-                    console.log(this.state.buttonSFstate)
                 }
                 else {
                     console.log("Error 404")
@@ -156,7 +151,6 @@ class VisitProfile extends React.Component {
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
-                    console.log(msg)
                     this.fetchSuperfollows();
                 }
                 else {

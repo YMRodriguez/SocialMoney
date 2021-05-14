@@ -31,7 +31,6 @@ function App(props) {
         async: false, //va a esperar la respuesta del servidor, si lo pongo true => asyncrono no hacer
         success: function (msg) {
             if (msg.code == 200) {
-                console.log(msg)
                 props.dispatch(userUnlogged())
                 history.push("/login")
             } else {

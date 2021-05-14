@@ -42,11 +42,6 @@ export default function UserPost(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions id="cardactions">
-                <Link to="/author/postId">
-                    <Button size="small" color="primary" id="linktoarticle">
-                        Go to full article
-                    </Button>
-                </Link>
                 <Button size="small" color="primary" id="linktoarticle">
                     Remove
                 </Button>

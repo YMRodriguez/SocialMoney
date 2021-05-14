@@ -95,6 +95,8 @@ function ButtonAppBar(props) {
                                             if (msg.code == 200) {
                                                 history.push("/searchprofile")
                                                 let account = JSON.parse(msg.account)
+                                                let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
+                                                account.picture = base64String
                                                 props.dispatch(userVisited(account))
 
                                                 let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
@@ -115,8 +117,6 @@ function ButtonAppBar(props) {
                                                 }
 
                                                 alert("¡Encontrado con éxito!")
-                                                console.log('Success')
-                                                console.log(visitfollowers)
                                             }
                                             else {
                                                 console.log("Error 404")

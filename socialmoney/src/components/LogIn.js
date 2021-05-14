@@ -118,7 +118,6 @@ function LogIn(props) {
         rsa.setPublicKeyFromASN(tree);
         var crypted = rsa.encrypt(params.password);
         params.password = crypted;
-        console.log(params.password)
         var url = "http://localhost:8080/SMON-SERVICE/login"
 
 
@@ -136,7 +135,6 @@ function LogIn(props) {
                     history.push("/feed")
                     let account = JSON.parse(msg.account)
                     let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
-                    // This is kind of a dirty fix and should be a generic method.
                     account.picture = base64String
                     let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
                     let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
@@ -153,7 +151,6 @@ function LogIn(props) {
                     else {
                         props.dispatch(userFollows([]))
                     }
-                    console.log(account)
                 } else {
                     alert("Usuario incorrecto")
                 }
