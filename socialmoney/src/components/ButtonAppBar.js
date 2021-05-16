@@ -95,21 +95,23 @@ function ButtonAppBar(props) {
                                             if (msg.code == 200) {
                                                 history.push("/searchprofile")
                                                 let account = JSON.parse(msg.account)
-                                                let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
-                                                account.picture = base64String
+                                                let base64String = btoa(
+                                                    new Uint8Array(account.picture)
+                                                        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                                                ); account.picture = base64String
                                                 props.dispatch(userVisited(account))
 
-                                                let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
-                                                let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1,JSON.parse(msg.visitFollows).userFollowers.length-1)
+                                                let visitfollows = JSON.parse(msg.visitFollows).userFollows.substring(1, JSON.parse(msg.visitFollows).userFollowers.length - 1)
+                                                let visitfollowers = JSON.parse(msg.visitFollows).userFollowers.substring(1, JSON.parse(msg.visitFollows).userFollowers.length - 1)
 
-                                                if (visitfollowers.length != 0){
+                                                if (visitfollowers.length != 0) {
                                                     props.dispatch(visitFollowers(visitfollowers.split(",")))
                                                 }
                                                 else {
                                                     props.dispatch(visitFollowers([]))
                                                 }
-                            
-                                                if (visitfollows.length != 0){
+
+                                                if (visitfollows.length != 0) {
                                                     props.dispatch(visitFollows(visitfollows.split(",")))
                                                 }
                                                 else {

@@ -22,63 +22,65 @@ const useStyles = makeStyles({
 
 export default function PostFeed(props) {
     const classes = useStyles();
-if(props.allowbutton){
-    return (
-        <Card id="card" variant="outlined">
-            <CardActionArea>
-                <CardMedia
-                    id="media"
-                    image={props.user2}
-                    title="User"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {props.publication.title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {props.publication.content}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions id="cardactions">
+    if (props.allowbutton) {
+        return (
+            <Card id="card" variant="outlined">
+                <CardActionArea>
+                    <CardMedia
+                        id="media"
+                        image={props.user2}
+                        title="User"
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {props.publication.title}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {props.publication.content}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions id="cardactions">
+                    {props.publication.isexclusive ?
+                        <Button id="buttonInPost"><p>Community content from  <b>{props.publication.author.name}</b></p></Button> :
+                        <Button id="buttonInPost2"><p>Content from  <b>{props.publication.author.name}</b></p></Button>}
 
-        
-{/*                 <Link to="/author">
+                    {/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
-                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  
+                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}
 
 
-                
-            </CardActions>
-        </Card>
-    );
 
-}
-else{
-    return (
-        <Card id="card" variant="outlined">
-            <CardActionArea>
-                <CardMedia
-                    id="media"
-                    image={props.user2}
-                    title="User"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {props.publication.title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {props.publication.content}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions id="cardactions">
-{/*                 <Link to="/author">
+                </CardActions>
+            </Card >
+        );
+
+    }
+    else {
+        return (
+            <Card id="card" variant="outlined">
+                <CardActionArea>
+                    <CardMedia
+                        id="media"
+                        image={props.user2}
+                        title="User"
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {props.publication.title}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {props.publication.content}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions id="cardactions">
+                    {/*                 <Link to="/author">
                     <UserAvatar user={props.author} id="avatar" />
-                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}  
-            </CardActions>
-        </Card>
-    );
-    
-}
+                </Link>  Con el feed hay que tener cuidado con esto. Ahora nos lo podemos cargar.*/}
+                </CardActions>
+            </Card>
+        );
+
+    }
 }

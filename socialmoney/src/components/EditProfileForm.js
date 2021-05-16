@@ -151,7 +151,10 @@ function EditProfileForm(props) {
             success: function (msg) {
                 if (msg.code == 200) {
                     let account = JSON.parse(msg.account)
-                    let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
+                    let base64String = btoa(
+                        new Uint8Array(account.picture)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
                     // This is kind of a dirty fix and should be a generic method.
                     account.picture = base64String
                     props.dispatch(userLogged(account))

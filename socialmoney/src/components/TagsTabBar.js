@@ -11,7 +11,7 @@ import PostFeed from './PostFeed.js';
 import $ from 'jquery';
 
 
-function TabPanel(props){
+function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
         <div
@@ -38,7 +38,7 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-export default class TagsTabBar extends React.Component{
+export default class TagsTabBar extends React.Component {
 
     constructor(props) {
         super(props);
@@ -53,18 +53,18 @@ export default class TagsTabBar extends React.Component{
     }
 
     handleChange = (event, newValue) => {
-        this.setState({value: newValue})
+        this.setState({ value: newValue })
     };
 
-     fetchFollowPosts() {
+    fetchFollowPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/feed",
-        
+
             xhrFields: {
-          withCredentials: true
+                withCredentials: true
             },
             crossDomain: true,
-            
+
             type: 'POST',
             data: JSON.stringify({ username: this.props.user.username }),
             async: false,
@@ -81,7 +81,7 @@ export default class TagsTabBar extends React.Component{
                 }
             }.bind(this)
         });
-    } 
+    }
 
 
     render() {
@@ -98,7 +98,21 @@ export default class TagsTabBar extends React.Component{
 
                 <TabPanel value={this.state.value} index={0} id="tagpanel" style={{ width: "100%" }}>
                     <div id="posts">
-                            {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
+                        {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
+                            return (
+                                <PostFeed publication={p}
+                                    index={i}
+                                    className="post"
+                                    allowbutton={true}
+                                />
+                            )
+                        }) : <p>No hay publicaciones su feed</p>}
+                    </div>
+                </TabPanel>
+                <TabPanel value={this.state.value} index={1} id="tagpanel" style={{ width: "100%" }}>
+                    <div id="posts">
+                        {(this.state.posts.filter(p => p.isopinion).length != 0) ? this.state.posts.map((p, i) => {
+                            if (p.isopinion) {
                                 return (
                                     <PostFeed publication={p}
                                         index={i}
@@ -106,58 +120,44 @@ export default class TagsTabBar extends React.Component{
                                         allowbutton={true}
                                     />
                                 )
-                            }) : <p>No hay publicaciones su feed</p>}
-                    </div>            
-                </TabPanel>
-            <TabPanel value={this.state.value} index={1} id="tagpanel" style={{ width: "100%" }}>
-                <div id="posts">
-                                {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
-                                    if (p.isopinion){
-                                    return (
-                                        <PostFeed publication={p}
-                                            index={i}
-                                            className="post"
-                                            allowbutton={true}
-                                        />
-                                    )
-                                }
-                                }) : <p>No hay publicaciones de opiniones</p>}
-                        </div>    
+                            }
+                        }) : <p>No hay publicaciones de opiniones entre la gente a la que sigues</p>}
+                    </div>
                 </TabPanel>
 
                 <TabPanel value={this.state.value} index={2} id="tagpanel" style={{ width: "100%" }}>
 
                     <div id="posts">
-                                {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
-                                    if (p.istecan){
-                                        return (
-                                            <PostFeed publication={p}
-                                                index={i}
-                                                className="post"
-                                                allowbutton={true}
-                                            />
-                                        )
-                                    }
-                                }) : <p>No hay publicaciones de análisis técnico </p>}
-                        </div>    
+                        {(this.state.posts.filter(p => p.istecan).length != 0) ? this.state.posts.map((p, i) => {
+                            if (p.istecan) {
+                                return (
+                                    <PostFeed publication={p}
+                                        index={i}
+                                        className="post"
+                                        allowbutton={true}
+                                    />
+                                )
+                            }
+                        }) : <p>No hay publicaciones de análisis técnico entre la gente a la que sigues </p>}
+                    </div>
 
                 </TabPanel>
 
                 <TabPanel value={this.state.value} index={3} id="tagpanel" style={{ width: "100%" }}>
 
                     <div id="posts">
-                                {(this.state.posts.length != 0) ? this.state.posts.map((p, i) => {
-                                    if (p.isfundan){
-                                        return (
-                                            <PostFeed publication={p}
-                                                index={i}
-                                                className="post"
-                                                allowbutton={true}
-                                            />
-                                        )
-                                    }
-                                }) : <p>No hay publicaciones de análisis fundamental</p>}
-                        </div>    
+                        {(this.state.posts.filter(p => p.isfundan).length != 0) ? this.state.posts.map((p, i) => {
+                            if (p.isfundan) {
+                                return (
+                                    <PostFeed publication={p}
+                                        index={i}
+                                        className="post"
+                                        allowbutton={true}
+                                    />
+                                )
+                            }
+                        }) : <p>No hay publicaciones de análisis fundamental entre la gente a la que sigues</p>}
+                    </div>
                 </TabPanel>
             </div>
         );

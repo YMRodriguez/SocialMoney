@@ -65,8 +65,9 @@ export default function ConnectPlatformForm(props) {
                         if (msg.code == 200) {
                             console.log('Success')
                         }
-                        else if (msg.code == 204) {
-                            console.log('Success')
+                        else if (msg.code == 300) {
+                            alert("Not a valid PDF")
+                            console.log('Not a valid PDF! Please check what you uploaded')
                         }
                         else {
                             console.log("Error 404")

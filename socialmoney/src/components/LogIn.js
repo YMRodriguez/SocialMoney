@@ -134,8 +134,10 @@ function LogIn(props) {
                 if (msg.code == 200) {
                     history.push("/feed")
                     let account = JSON.parse(msg.account)
-                    let base64String = btoa(String.fromCharCode(...new Uint8Array(account.picture)));
-                    account.picture = base64String
+                    let base64String = btoa(
+                        new Uint8Array(account.picture)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    ); account.picture = base64String
                     let follows = JSON.parse(msg.userFollows).userFollows.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
                     let followers = JSON.parse(msg.userFollows).userFollowers.substring(1, JSON.parse(msg.userFollows).userFollowers.length - 1)
                     props.dispatch(userLogged(account))

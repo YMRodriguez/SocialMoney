@@ -11,7 +11,7 @@ class VisitProfile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { posts: [], buttonstate: false, buttonSFstate: "", follows: [], followers: [], account:[] }
+        this.state = { posts: [], buttonstate: false, buttonSFstate: "", follows: [], followers: [], account: [] }
     }
 
     async componentDidMount() {
@@ -21,8 +21,8 @@ class VisitProfile extends React.Component {
     }
 
 
-    async componentDidUpdate(prevProps){
-        if (prevProps.visituser.username !== this.props.visituser.username){
+    async componentDidUpdate(prevProps) {
+        if (prevProps.visituser.username !== this.props.visituser.username) {
             this.fetchFollows();
             this.fetchSuperfollows();
         }
@@ -41,44 +41,42 @@ class VisitProfile extends React.Component {
             success: function (msg) {
                 if (msg.code == 200) {
                     console.log('Success')
-                    let follows = JSON.parse(msg.userfollows).userFollows.substring(1,JSON.parse(msg.userfollows).userFollows.length-1)
-                    let followers = JSON.parse(msg.userfollows).userFollowers.substring(1,JSON.parse(msg.userfollows).userFollowers.length-1)
+                    let follows = JSON.parse(msg.userfollows).userFollows.substring(1, JSON.parse(msg.userfollows).userFollows.length - 1)
+                    let followers = JSON.parse(msg.userfollows).userFollowers.substring(1, JSON.parse(msg.userfollows).userFollowers.length - 1)
                     let button = JSON.parse(msg.button)
 
-                    this.setState({buttonstate: button})
+                    this.setState({ buttonstate: button })
                     console.log(msg.button)
 
-                    if (followers.length != 0){
-                        this.setState({followers: followers.split(",")})
+                    if (followers.length != 0) {
+                        this.setState({ followers: followers.split(",") })
                     }
                     else {
-                        this.setState({followers: []})
+                        this.setState({ followers: [] })
                     }
-                    if (follows.length != 0){
-                        this.setState({follows: follows.split(",")})
+                    if (follows.length != 0) {
+                        this.setState({ follows: follows.split(",") })
                     }
                     else {
-                        this.setState({follows: []})
-                    } 
-
+                        this.setState({ follows: [] })
+                    }
                 }
                 else {
                     console.log("Error 404")
                 }
             }.bind(this)
         })
-
     }
- 
+
     fetchfollow() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/follow",
             xhrFields: {
                 withCredentials: true
-              },
+            },
             crossDomain: true,
             type: 'POST',
-            data: JSON.stringify({username: this.props.user.username, followed: this.props.visituser.username }),
+            data: JSON.stringify({ username: this.props.user.username, followed: this.props.visituser.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
@@ -94,13 +92,12 @@ class VisitProfile extends React.Component {
     fetchPosts() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/publications",
-
             xhrFields: {
                 withCredentials: true
             },
             crossDomain: true,
             type: 'POST',
-            data: JSON.stringify({ username: this.props.visituser.username}),
+            data: JSON.stringify({ username: this.props.visituser.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
@@ -117,12 +114,13 @@ class VisitProfile extends React.Component {
             }.bind(this)
         });
     }
+
     fetchSuperfollows() {
         $.ajax({
             url: "http://localhost:8080/SMON-SERVICE/showsuperfollows",
             xhrFields: {
                 withCredentials: true
-              },
+            },
             crossDomain: true,
             type: 'POST',
             data: JSON.stringify({ username: this.props.visituser.username, myusername: this.props.user.username }),
@@ -130,7 +128,7 @@ class VisitProfile extends React.Component {
             success: function (msg) {
                 if (msg.code == 200) {
                     console.log('Success')
-                    this.setState({buttonSFstate: msg.button})
+                    this.setState({ buttonSFstate: msg.button })
                 }
                 else {
                     console.log("Error 404")
@@ -144,10 +142,10 @@ class VisitProfile extends React.Component {
             url: "http://localhost:8080/SMON-SERVICE/superfollow",
             xhrFields: {
                 withCredentials: true
-              },
-              crossDomain: true,
+            },
+            crossDomain: true,
             type: 'POST',
-            data: JSON.stringify({myusername: this.props.user.username, username: this.props.visituser.username }),
+            data: JSON.stringify({ myusername: this.props.user.username, username: this.props.visituser.username }),
             async: false,
             success: function (msg) {
                 if (msg.code == 200) {
@@ -175,7 +173,7 @@ class VisitProfile extends React.Component {
                             </Link>
                             <div id="profileimgname">
                                 <img src={this.props.visituser.picture ? ("data:image/png;base64," + this.props.visituser.picture) : user2} alt="Profile picture" id="profilepic" />
-                                <div style={{ textAlign: "center" }}><h2>{this.props.visituser.name}</h2></div>
+                                <div style={{ textAlign: "center" }}><h2>{this.props.visituser.username}</h2></div>
                             </div>
                             <div id="userHeader">
                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
@@ -205,27 +203,27 @@ class VisitProfile extends React.Component {
                             <div>Publicaciones<div>{this.state.posts.length}</div></div>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                            {this.props.visituser.showprofits ? (<div><div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
                                 <div>Rentabilidad
-                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.profit}</div>
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.props.visituser.profit}</div>
                                 </div>
                             </div>
-                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                                <div>Timeframe
-                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.timeframe}</div>
+                                <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                                    <div>Timeframe
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.props.visituser.timeframe}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                                <div>Tipo de cuenta
-                            <div style={{ textAlign: "center", width: "100%" }}>{this.state.account.accountType}</div>
-                                </div>
-                            </div>
+                                <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
+                                    <div>Tipo de cuenta
+                            <div style={{ textAlign: "center", width: "100%" }}>{this.props.visituser.accountType}</div>
+                                    </div>
+                                </div></div>) : (<div></div>)}
                             <Button color="primary" id="buttonSuperFollow" onClick={() => { this.fetchfollow() }} style={{ color: "white" }}>
                                 {this.state.buttonstate ? "Dejar de seguir" : "Seguir"}
                             </Button>
                         </div>
                         <div style={{ textAlign: "center", width: "100%", fontSize: "20px", marginTop: "8%" }}>
-                            <Button color="primary" id="buttonSuperFollow" onClick={() => {this.fetchSuperfollow()}} style={{ color: "white" }} >
+                            <Button color="primary" id="buttonSuperFollow" onClick={() => { this.fetchSuperfollow() }} style={{ color: "white" }} >
                                 {this.state.buttonSFstate}
                             </Button>
                         </div>

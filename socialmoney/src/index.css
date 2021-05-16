@@ -198,6 +198,18 @@ h1 {
   border-radius: 10px;
 }
 
+#buttonInPost {
+  background-color:#C6ECE7;
+  color: black;
+  font-size: 10px;
+}
+
+#buttonInPost2 {
+  background-color:#ECC6CE;
+  color: black;
+  font-size: 10px;
+}
+
 #followItem{
   display: flex;
   flex-direction: row;
