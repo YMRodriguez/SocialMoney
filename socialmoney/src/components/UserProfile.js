@@ -139,15 +139,9 @@ class UserProfile extends React.Component {
                     if (followers.length != 0) {
                         this.setState({ followers: followers.split(",") })
                     }
-                    else {
-                        this.setState({ followers: [] })
-                    }
 
                     if (follows.length != 0) {
                         this.setState({ follows: follows.split(",") })
-                    }
-                    else {
-                        this.setState({ follows: [] })
                     }
 
                 }
@@ -183,15 +177,9 @@ class UserProfile extends React.Component {
                     if (followers.length != 0) {
                         this.setState({ superfollowers: followers.split(",") })
                     }
-                    else {
-                        this.setState({ followers: [] })
-                    }
 
                     if (pend.length != 0) {
                         this.setState({ pendings: pend.split(",") })
-                    }
-                    else {
-                        this.setState({ pendings: [] })
                     }
 
                 }
