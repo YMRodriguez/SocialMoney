@@ -2,10 +2,8 @@ import '../App.css';
 import React from "react";
 import "@fontsource/roboto";
 import TagsTabBar from './TagsTabBar';
-import user from '../user.png'
-import dow from '../dow.png';
-import nasdaq from '../nasdaq.png';
-import sp500 from '../sp500.png';
+import StockChart from "../components/StockChart.js";
+import user from '../user.png';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import FormDialog from "./FormDialog.js";
@@ -44,6 +42,7 @@ function App(props) {
       <div style={{ width: "70%" }}>
         <TagsTabBar id="feed" data={user2}
           user={props.user} />
+        <StockChart></StockChart>
       </div>
       <div style={{ display: "flex", flexDirection: "column", width: "30%", marginTop: "1%", height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -67,9 +66,6 @@ function App(props) {
             LogOut
             </Button>
         </div>
-        <div style={{ width: "100%", marginTop: "2%" }}><img src={nasdaq} style={{ width: "80%", marginLeft: "5%" }} /></div>
-        <div style={{ width: "100%", marginTop: "2%" }}><img src={dow} style={{ width: "80%", marginLeft: "5%" }} /></div>
-        <div style={{ width: "100%", marginTop: "2%" }}><img src={sp500} style={{ width: "80%", marginLeft: "5%" }} /></div>
       </div >
     </div >
   );

@@ -92,7 +92,9 @@ h1 {
 }
 #feed {
   margin-left: 50px;
+  height: 80%;
 }
+
 #lateral {
   width: 30%;
   flex:1;
